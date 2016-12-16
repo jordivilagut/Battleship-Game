@@ -1,9 +1,8 @@
 package salvo;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Game {
@@ -26,9 +25,17 @@ public class Game {
     }
 
     @OneToMany(mappedBy="game", fetch = FetchType.EAGER)
-    Set<Participation> participations = new HashSet<>();
+    Set<Participation> participations;
 
     public Set<Participation> getParticipations() {
         return participations;
+    }
+
+    public Map<String, Object> getMap() {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("id", id);
+        map.put("created", timeStamp);
+        map.put("participants", participations.stream().map(participation -> participation.getMap()).collect(toList()));
+        return map;
     }
 }

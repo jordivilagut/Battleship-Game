@@ -2,6 +2,10 @@ package salvo;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Participation {
@@ -13,8 +17,10 @@ public class Participation {
 
     public Participation() {}
 
-    public Participation(Date timeStamp) {
+    public Participation(Date timeStamp, Game game, Player player) {
         this.timeStamp = timeStamp;
+        this.game = game;
+        this.player = player;
     }
 
     public Date getTimeStamp() { return timeStamp; }
@@ -35,6 +41,8 @@ public class Participation {
         return game;
     }
 
+    public Player getPlayer(){ return player; }
+
     public void setGame(Game game){
         this.game = game;
     }
@@ -42,4 +50,17 @@ public class Participation {
     public void setPlayer(Player player){
         this.player = player;
     }
+
+    public Map<String, Object> getMap() {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("id", id);
+        map.put("player", player.getMap());
+        return map;
+    }
 }
+
+// player -> wrong display
+// this.getPlayer -> wrong display
+// player.getMap() -> Whitelabel error page. Error 500.
+// player.toString() -> Whitelabel error page. Error 500.
+// player.getId() -> Whitelabel error page. Error 500.

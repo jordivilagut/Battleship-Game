@@ -18,81 +18,27 @@ public class SalvoApplication {
 	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, ParticipationRepository participationRepository) {
 		return (args) -> {
 			Date date = new Date();
-			Player player1 = new Player("j.bauer@ctu.gov");
-			Player player2 = new Player("c.obrian@ctu.gov");
-			Player player3 = new Player("t.almeida@ctu.gov");
-			Player player4 = new Player("d.palmer@whitehouse.gov");
-			Game game1 = new Game(date);
-			Game game2 = new Game(Date.from(date.toInstant().plusSeconds(3600)));
-			Game game3 = new Game(Date.from(date.toInstant().plusSeconds(3600*2)));
-			Game game4 = new Game(Date.from(date.toInstant().plusSeconds(3600*3)));
-			Game game5 = new Game(Date.from(date.toInstant().plusSeconds(3600*4)));
-			Game game6 = new Game(Date.from(date.toInstant().plusSeconds(3600*5)));
-			Participation participation1 = new Participation(date);
-			Participation participation2 = new Participation(date);
-			Participation participation3 = new Participation(date);
-			Participation participation4 = new Participation(date);
-			Participation participation5 = new Participation(date);
-			Participation participation6 = new Participation(date);
-			Participation participation7 = new Participation(date);
-			Participation participation8 = new Participation(date);
-			Participation participation9 = new Participation(date);
-			Participation participation10  = new Participation(date);
-			Participation participation11  = new Participation(date);
-
-			playerRepository.save(player1);
-			playerRepository.save(player2);
-			playerRepository.save(player3);
-			playerRepository.save(player4);
-			gameRepository.save(game1);
-			gameRepository.save(game2);
-			gameRepository.save(game3);
-			gameRepository.save(game4);
-			gameRepository.save(game5);
-			gameRepository.save(game6);
-
-			participation1.setPlayer(player1);
-			participation1.setGame(game1);
-			participationRepository.save(participation1);
-
-			participation2.setGame(game1);
-			participationRepository.save(participation2);
-
-			participation3.setPlayer(player1);
-			participation3.setGame(game2);
-			participationRepository.save(participation3);
-
-			participation4.setPlayer(player2);
-			participation4.setGame(game2);
-			participationRepository.save(participation4);
-
-			participation5.setPlayer(player2);
-			participation5.setGame(game3);
-			participationRepository.save(participation5);
-
-			participation6.setPlayer(player3);
-			participation6.setGame(game3);
-			participationRepository.save(participation6);
-
-			participation7.setPlayer(player1);
-			participation7.setGame(game4);
-			participationRepository.save(participation7);
-
-			participation8.setPlayer(player2);
-			participation8.setGame(game4);
-			participationRepository.save(participation8);
-
-			participation9.setPlayer(player3);
-			participation9.setGame(game5);
-			participationRepository.save(participation9);
-
-			participation10.setPlayer(player1);
-			participation10.setGame(game5);
-			participationRepository.save(participation10);
-
-			participation11.setPlayer(player4);
-			participation11.setGame(game6);
-			participationRepository.save(participation11);
+			Player player1 = playerRepository.save(new Player("j.bauer@ctu.gov"));
+			Player player2 = playerRepository.save(new Player("c.obrian@ctu.gov"));
+			Player player3 = playerRepository.save(new Player("t.almeida@ctu.gov"));
+			Player player4 = playerRepository.save(new Player("d.palmer@whitehouse.gov"));
+			Game game1 = gameRepository.save(new Game(date));
+			Game game2 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600))));
+			Game game3 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600*2))));
+			Game game4 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600*3))));
+			Game game5 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600*4))));
+			Game game6 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600*5))));
+			Participation participation1 = participationRepository.save(new Participation(date, game1, player1));
+			Participation participation2 = participationRepository.save(new Participation(date, game1, player2));
+			Participation participation3 = participationRepository.save(new Participation(date, game2, player1));
+			Participation participation4 = participationRepository.save(new Participation(date, game2, player2));
+			Participation participation5 = participationRepository.save(new Participation(date, game3, player2));
+			Participation participation6 = participationRepository.save(new Participation(date, game3, player3));
+			Participation participation7 = participationRepository.save(new Participation(date, game4, player1));
+			Participation participation8 = participationRepository.save(new Participation(date, game4, player2));
+			Participation participation9 = participationRepository.save(new Participation(date, game5, player3));
+			Participation participation10  = participationRepository.save(new Participation(date, game5, player1));
+			Participation participation11  = participationRepository.save(new Participation(date, game6, player4));
 		};
 	}
 }
