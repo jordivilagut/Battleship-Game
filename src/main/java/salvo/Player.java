@@ -1,8 +1,6 @@
 package salvo;
 
 import javax.persistence.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -15,37 +13,16 @@ public class Player {
 
     public Player() {}
 
-    public Player(String username) {
-        this.username = username;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public Player(String username) {this.username = username;}
 
     @OneToMany(mappedBy="player", fetch = FetchType.EAGER)
     Set<Participation> participations;
 
-    public Set<Participation> getParticipations() {
-        return participations;
-    }
+    public long getId() {return id;}
 
-    public String toString() {
-        return "Player: " + id;
-    }
+    public String getUsername() {return username;}
 
-    public Map<String, Object> getMap() {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id", id);
-        map.put("username", username);
-        return map;
-    }
+    public Set<Participation> getParticipations() {return participations;}
+
+    public void setUsername(String username) {this.username = username;}
 }
