@@ -4,7 +4,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class SalvoApplication {
@@ -14,9 +16,10 @@ public class SalvoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, ParticipationRepository participationRepository) {
+	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, ParticipationRepository participationRepository, ShipRepository shipRepository) {
 		return (args) -> {
 			Date date = new Date();
+			List<String> locations = Arrays.asList("A1", "B2", "C3");
 			Player player1 = playerRepository.save(new Player("j.bauer@ctu.gov"));
 			Player player2 = playerRepository.save(new Player("c.obrian@ctu.gov"));
 			Player player3 = playerRepository.save(new Player("t.almeida@ctu.gov"));
@@ -38,6 +41,24 @@ public class SalvoApplication {
 			Participation participation9 = participationRepository.save(new Participation(date, game5, player3));
 			Participation participation10  = participationRepository.save(new Participation(date, game5, player1));
 			Participation participation11  = participationRepository.save(new Participation(date, game6, player4));
+			Ship ship = new Ship("Carrier", locations);
+			participation1.addShip(ship);
+			shipRepository.save(ship);
+			ship = new Ship("Submarine", locations);
+			participation1.addShip(ship);
+			shipRepository.save(ship);
+			ship = new Ship("Carrier", locations);
+			participation1.addShip(ship);
+			shipRepository.save(ship);
+			ship = new Ship("Carrier", locations);
+			participation2.addShip(ship);
+			shipRepository.save(ship);
+			ship = new Ship("Submarine", locations);
+			participation2.addShip(ship);
+			shipRepository.save(ship);
+			ship = new Ship("Carrier", locations);
+			participation2.addShip(ship);
+			shipRepository.save(ship);
 		};
 	}
 }
