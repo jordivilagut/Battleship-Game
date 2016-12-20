@@ -11,12 +11,12 @@ public class Game {
     private long id;
     private Date timeStamp;
 
+    @OneToMany(mappedBy="game", fetch = FetchType.EAGER)
+    private Set<Participation> participations;
+
     public Game() {}
 
     public Game(Date timeStamp) {this.timeStamp = timeStamp;}
-
-    @OneToMany(mappedBy="game", fetch = FetchType.EAGER)
-    Set<Participation> participations;
 
     public long getId() {return id;}
 

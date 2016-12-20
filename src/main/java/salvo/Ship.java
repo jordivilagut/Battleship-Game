@@ -23,7 +23,7 @@ public class Ship {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "participationId")
+    @JoinColumn(name = "participation_id")
     private Participation participation;
 
     public Participation getParticipation() {return participation;}

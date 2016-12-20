@@ -11,12 +11,12 @@ public class Player {
     private long id;
     private String username;
 
+    @OneToMany(mappedBy="player", fetch = FetchType.EAGER)
+    private Set<Participation> participations;
+
     public Player() {}
 
     public Player(String username) {this.username = username;}
-
-    @OneToMany(mappedBy="player", fetch = FetchType.EAGER)
-    Set<Participation> participations;
 
     public long getId() {return id;}
 

@@ -13,6 +13,17 @@ public class Participation {
     private long id;
     private Date timeStamp;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "player_id")
+    private Player player;
+
+    @OneToMany(mappedBy="participation", fetch = FetchType.EAGER)
+    private Set<Ship> ships = new HashSet<>();
+
     public Participation() {}
 
     public Participation(Date timeStamp, Game game, Player player) {
@@ -20,17 +31,6 @@ public class Participation {
         this.game = game;
         this.player = player;
     }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "gameId")
-    private Game game;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "playerId")
-    private Player player;
-
-    @OneToMany(mappedBy="participation", fetch = FetchType.EAGER)
-    Set<Ship> ships = new HashSet<>();
 
     public long getId() {return id;}
 
