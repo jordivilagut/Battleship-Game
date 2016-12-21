@@ -25,7 +25,7 @@ public class Participation {
     private Set<Ship> ships = new HashSet<>();
 
     @OneToMany(mappedBy="participation", fetch = FetchType.EAGER)
-    private Set<Salvo> salvoes = new HashSet<>();
+    private Set<Salvo> salvos = new HashSet<>();
 
     public Participation() {}
 
@@ -45,7 +45,7 @@ public class Participation {
 
     public Set<Ship> getShips() {return ships;}
 
-    public Set<Salvo> getSalvoes() {return salvoes;}
+    public Set<Salvo> getSalvos() {return salvos;}
 
     public void addShip(Ship ship) {
         ship.setParticipation(this);
@@ -54,6 +54,6 @@ public class Participation {
 
     public void addSalvo(Salvo salvo) {
         salvo.setParticipation(this);
-        salvoes.add(salvo);
+        salvos.add(salvo);
     }
 }

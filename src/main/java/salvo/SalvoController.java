@@ -45,6 +45,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", participation.getId());
         dto.put("player", getPlayerDTO(participation.getPlayer()));
+        dto.put("salvos", participation.getSalvos().stream().map(salvo -> getSalvoDTO(salvo)).collect(toList()));
         return dto;
     }
 
@@ -61,7 +62,6 @@ public class SalvoController {
         dto.put("created", view.getTimeStamp());
         dto.put("players", view.getGame().getParticipations().stream().map(participation -> getParticipationDTO(participation)).collect(toList()));
         dto.put("ships", view.getShips().stream().map(ship -> getShipDTO(ship)).collect(toList()));
-        dto.put("salvoes", view.getGame().getParticipations().stream().map(participation -> participation.getSalvoes().stream().map(salvo -> getSalvoDTO(salvo)).collect(toList())).collect(toList()));
         return dto;
     }
 
@@ -72,10 +72,8 @@ public class SalvoController {
         return dto;
     }
 
-    //Another approach could be adding Salvo Info directly to ParticipationDTO.
     public Map<String, Object> getSalvoDTO(Salvo salvo) {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("player", salvo.getParticipation().getPlayer().getUsername());
         dto.put("turn", salvo.getTurn());
         dto.put("locations", salvo.getLocations());
         return dto;

@@ -91,23 +91,27 @@ public class SalvoApplication {
 			participation1.addSalvo(salvo);
 			salvoRepository.save(salvo);
 
-			salvo = new Salvo(1, Arrays.asList("D4", "H5"));
+			salvo = new Salvo(2, Arrays.asList("D4", "H5"));
 			participation1.addSalvo(salvo);
 			salvoRepository.save(salvo);
 
-			salvo = new Salvo(2, Arrays.asList("E3", "B1"));
+			salvo = new Salvo(3, Arrays.asList("E3", "B1"));
 			participation1.addSalvo(salvo);
 			salvoRepository.save(salvo);
 
-			salvo = new Salvo(2, Arrays.asList("J1", "J9"));
+			salvo = new Salvo(4, Arrays.asList("A1", "A6"));
 			participation1.addSalvo(salvo);
 			salvoRepository.save(salvo);
 
-			salvo = new Salvo(1, Arrays.asList("C1", "H10"));
+			salvo = new Salvo(1, Arrays.asList("J1", "J9"));
 			participation2.addSalvo(salvo);
 			salvoRepository.save(salvo);
 
-			salvo = new Salvo(1, Arrays.asList("A8", "A9"));
+			salvo = new Salvo(2, Arrays.asList("B4", "H10"));
+			participation2.addSalvo(salvo);
+			salvoRepository.save(salvo);
+
+			salvo = new Salvo(3, Arrays.asList("A8", "A9"));
 			participation2.addSalvo(salvo);
 			salvoRepository.save(salvo);
 		};

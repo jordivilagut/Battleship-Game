@@ -1,14 +1,15 @@
-createGrid();
+createGrid("topGrid");
+createGrid("bottomGrid");
 getViewData();
 
-function createGrid(){
+function createGrid(element){
     var rows = 10;
     var cols = 10;
-    var rowHeaders = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    var rowHeaders = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
     for(var i = 0; i <= rows ; i++){
         var row = document.createElement("tr");
-        $("#grid").append(row);
+        $("#" + element).append(row);
 
         for(var j = 0; j <= cols; j++){
             var col = document.createElement("td");
@@ -20,7 +21,7 @@ function createGrid(){
                 col = document.createElement("th");
                 col.innerHTML = j;
             }
-            col.setAttribute("id", "" + rowHeaders[i] + j);
+            col.setAttribute("id", element + rowHeaders[i] + j);
             row.append(col);
         }
     }
@@ -41,19 +42,28 @@ function getViewData() {
 
     $.get("api/game_view/" + id)
         .done(function(data) {
-        printShips(data.ships);
-        printViewData(data.players, id);
+
+            var ships = data.ships;
+            var userSalvos = data.players.filter(function(player) {return player.id == id;})[0].salvos;
+            var opponentSalvos = data.players.filter(function(player) {return player.id != id;})[0].salvos;
+
+            printElement(ships, "top", "ship");
+            printElement(userSalvos, "bottom", "salvo");
+            printElement(opponentSalvos, "top", "hiddenSalvo");
+            printViewData(data.players, id);
+            printHits();
     })
         .fail(function( jqXHR, textStatus ) {
-        console.log("Request Failed");
+            console.log("Request Failed");
     });
 }
 
-function printShips(ships) {
-    ships.forEach(function(ship){
-        var loc = ship.locations;
+function printElement(element, grid, css) {
+    element.forEach(function(item){
+        var loc = item.locations;
             loc.forEach(function(location) {
-                $("#" + location).addClass("shipCell");
+                $("#" + grid + "Grid" + location).addClass(css);
+                $("#" + grid + "Grid" + location).text(item.turn);
             })
     })
 }
@@ -63,4 +73,18 @@ function printViewData(players, id) {
     var opponent = players.filter(function(user) {return user.id != id});
     $("#user").html(user[0].player.username);
     $("#opponent").html(opponent[0].player.username);
+}
+
+function printHits() {
+    var rowHeaders = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
+    for(var i = 1; i <= 10; i++) {
+        for(j = 0; j< 10; j++) {
+            var cell = "#topGrid" + rowHeaders[j] + i
+            if($(cell).hasClass("ship") && $(cell).hasClass("hiddenSalvo")) {
+                $(cell).removeClass("hiddenSalvo");
+                $(cell).addClass("salvo");
+            };
+        }
+    }
 }
