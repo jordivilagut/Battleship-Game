@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Ship {
+public class Salvo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String category;
+    private int turn;
 
     @ElementCollection
     @Column(name="location")
@@ -19,20 +19,20 @@ public class Ship {
     @JoinColumn(name = "participation_id")
     private Participation participation;
 
-    public Ship() {}
+    public Salvo() {}
 
-    public Ship(String category, List<String> locations) {
-        this.category = category;
+    public Salvo(int turn, List<String> locations) {
+        this.turn = turn;
         this.locations = locations;
     }
 
-    public Participation getParticipation() {return participation;}
-
     public long getId() {return id;}
 
-    public String getCategory() {return category;}
+    public int getTurn() {return turn;}
 
     public List<String> getLocations() {return locations;}
+
+    public Participation getParticipation() {return participation;}
 
     public void setParticipation(Participation participation) {this.participation = participation;}
 }

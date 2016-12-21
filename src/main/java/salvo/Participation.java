@@ -24,6 +24,9 @@ public class Participation {
     @OneToMany(mappedBy="participation", fetch = FetchType.EAGER)
     private Set<Ship> ships = new HashSet<>();
 
+    @OneToMany(mappedBy="participation", fetch = FetchType.EAGER)
+    private Set<Salvo> salvoes = new HashSet<>();
+
     public Participation() {}
 
     public Participation(Date timeStamp, Game game, Player player) {
@@ -42,8 +45,15 @@ public class Participation {
 
     public Set<Ship> getShips() {return ships;}
 
+    public Set<Salvo> getSalvoes() {return salvoes;}
+
     public void addShip(Ship ship) {
         ship.setParticipation(this);
         ships.add(ship);
+    }
+
+    public void addSalvo(Salvo salvo) {
+        salvo.setParticipation(this);
+        salvoes.add(salvo);
     }
 }
