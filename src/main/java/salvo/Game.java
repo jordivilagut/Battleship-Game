@@ -12,7 +12,7 @@ public class Game {
     private Date timeStamp;
 
     @OneToMany(mappedBy="game", fetch = FetchType.EAGER)
-    private Set<Participation> participations;
+    private Set<Participation> participations = new HashSet<>();
 
     public Game() {}
 

@@ -12,6 +12,8 @@ public class Participation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private Date timeStamp;
+    private double score;
+    private Date finishDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_id")
@@ -39,6 +41,10 @@ public class Participation {
 
     public Date getTimeStamp() {return timeStamp;}
 
+    public Date getfinishDate() {return finishDate;}
+
+    public double getScore() {return score;}
+
     public Game getGame(){return game;}
 
     public Player getPlayer() {return player;}
@@ -55,5 +61,9 @@ public class Participation {
     public void addSalvo(Salvo salvo) {
         salvo.setParticipation(this);
         salvos.add(salvo);
+    }
+
+    public void setScore(double score) {
+        this.score = score;
     }
 }

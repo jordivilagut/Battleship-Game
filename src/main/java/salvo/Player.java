@@ -1,6 +1,7 @@
 package salvo;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,7 @@ public class Player {
     private String username;
 
     @OneToMany(mappedBy="player", fetch = FetchType.EAGER)
-    private Set<Participation> participations;
+    private Set<Participation> participations = new HashSet<>();
 
     public Player() {}
 

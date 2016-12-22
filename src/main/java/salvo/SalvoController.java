@@ -17,6 +17,9 @@ public class SalvoController {
     private GameRepository games;
 
     @Autowired
+    private PlayerRepository players;
+
+    @Autowired
     private ParticipationRepository views;
 
     @RequestMapping("/games")
@@ -25,6 +28,15 @@ public class SalvoController {
                 .findAll()
                 .stream()
                 .map(game -> getGameDTO(game))
+                .collect(toList());
+    }
+
+    @RequestMapping("/players")
+    public List<Object> getPlayers() {
+        return players
+                .findAll()
+                .stream()
+                .map(player -> getPlayerDTO(player))
                 .collect(toList());
     }
 
@@ -45,6 +57,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", participation.getId());
         dto.put("player", getPlayerDTO(participation.getPlayer()));
+        dto.put("score", participation.getScore());
         dto.put("salvos", participation.getSalvos().stream().map(salvo -> getSalvoDTO(salvo)).collect(toList()));
         return dto;
     }
@@ -53,6 +66,10 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", player.getId());
         dto.put("username", player.getUsername());
+        dto.put("total", player.getParticipations().stream().mapToDouble(participation -> participation.getScore()).sum());
+        dto.put("won", player.getParticipations().stream().filter(participation -> participation.getScore() == 1).collect(toList()).size());
+        dto.put("lost", player.getParticipations().stream().filter(participation -> participation.getScore() == 0 && participation.getfinishDate() != null).collect(toList()).size());
+        dto.put("tied", player.getParticipations().stream().filter(participation -> participation.getScore() == 0.5).collect(toList()).size());
         return dto;
     }
 

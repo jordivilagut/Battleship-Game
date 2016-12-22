@@ -11,7 +11,7 @@ import java.util.List;
 @SpringBootApplication
 public class SalvoApplication {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
@@ -114,6 +114,9 @@ public class SalvoApplication {
 			salvo = new Salvo(3, Arrays.asList("A8", "A9"));
 			participation2.addSalvo(salvo);
 			salvoRepository.save(salvo);
+
+			participation11.setScore(1);
+			participationRepository.save(participation11);
 		};
 	}
 }

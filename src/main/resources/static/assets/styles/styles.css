@@ -26,3 +26,16 @@ th {
     vertical-align: top;
     font-size: 18px;
 }
+
+#gamesList table {
+    border: solid black 1px;
+    text-align: center;
+}
+
+#gamesList th {
+    padding: 5px;
+}
+
+#leaderBoard {
+    text-align: center;
+}
