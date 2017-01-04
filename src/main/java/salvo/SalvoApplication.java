@@ -25,6 +25,12 @@ public class SalvoApplication {
 			Player player3 = playerRepository.save(new Player("t.almeida@ctu.gov"));
 			Player player4 = playerRepository.save(new Player("d.palmer@whitehouse.gov"));
 
+			player1.setPassword("24");
+			player2.setPassword("42");
+			player3.setPassword("kb");
+			player4.setPassword("mole");
+			//players need to be saved to repository again now!!!
+
 			Game game1 = gameRepository.save(new Game(date));
 			Game game2 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600))));
 			Game game3 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600*2))));
