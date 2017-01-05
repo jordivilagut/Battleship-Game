@@ -3,11 +3,12 @@ loadPlayers();
 
 function loadGames() {
     $.get("api/games")
-        .done(function(games) {
-        showGameDetail(games);
+        .done(function(gameInfo) {
+            var games = gameInfo.games;
+            showGameDetail(games);
     })
         .fail(function( jqXHR, textStatus ) {
-        console.log( "Failed: " + textStatus );
+            console.log( "Failed: " + textStatus );
     });
 }
 

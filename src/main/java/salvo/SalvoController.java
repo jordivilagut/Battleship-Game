@@ -1,6 +1,7 @@
 package salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,12 +24,11 @@ public class SalvoController {
     private ParticipationRepository views;
 
     @RequestMapping("/games")
-    public List<Object> getGames() {
-        return games
-                .findAll()
-                .stream()
-                .map(game -> getGameDTO(game))
-                .collect(toList());
+    public Map<String, Object> getGamesInfo(Authentication auth) {
+        Map<String, Object> gamesInfo = new LinkedHashMap<>();
+        gamesInfo.put("player", getUser(auth));
+        gamesInfo.put("games", games.findAll().stream().map(game -> getGameDTO(game)).collect(toList()));
+        return gamesInfo;
     }
 
     @RequestMapping("/players")
@@ -94,5 +94,13 @@ public class SalvoController {
         dto.put("turn", salvo.getTurn());
         dto.put("locations", salvo.getLocations());
         return dto;
+    }
+
+    private String getUser(Authentication auth) {
+        if (auth != null) {
+            return players.findByUsername(auth.getName()).getUsername();
+        } else {
+            return "guest";
+        }
     }
 }

@@ -1,9 +1,21 @@
 package salvo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -20,16 +32,11 @@ public class SalvoApplication {
 		return (args) -> {
 			Date date = new Date();
 
-			Player player1 = playerRepository.save(new Player("j.bauer@ctu.gov"));
-			Player player2 = playerRepository.save(new Player("c.obrian@ctu.gov"));
-			Player player3 = playerRepository.save(new Player("t.almeida@ctu.gov"));
-			Player player4 = playerRepository.save(new Player("d.palmer@whitehouse.gov"));
-
-			player1.setPassword("24");
-			player2.setPassword("42");
-			player3.setPassword("kb");
-			player4.setPassword("mole");
-			//players need to be saved to repository again now!!!
+			Player player1 = playerRepository.save(new Player("j.bauer@ctu.gov", "24"));
+			Player player2 = playerRepository.save(new Player("c.obrian@ctu.gov", "42"));
+			Player player3 = playerRepository.save(new Player("t.almeida@ctu.gov", "kb"));
+			Player player4 = playerRepository.save(new Player("d.palmer@whitehouse.gov", "mole"));
+			Player player5 = playerRepository.save(new Player("jordi", "jordi"));
 
 			Game game1 = gameRepository.save(new Game(date));
 			Game game2 = gameRepository.save(new Game(Date.from(date.toInstant().plusSeconds(3600))));
@@ -60,7 +67,6 @@ public class SalvoApplication {
 			List<String> location8 = Arrays.asList("G8", "H8");
 			List<String> location9 = Arrays.asList("B9", "C9", "D9");
 			List<String> location10 = Arrays.asList("C1", "C2");
-
 
 			Ship ship = new Ship("Carrier", location1);
 			participation1.addShip(ship);
@@ -124,5 +130,56 @@ public class SalvoApplication {
 			participation11.setScore(1);
 			participationRepository.save(participation11);
 		};
+	}
+}
+
+@Configuration
+class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+	@Autowired
+	PlayerRepository players;
+
+	@Override
+	public void init(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService());
+	}
+
+	@Bean
+	UserDetailsService userDetailsService() {
+		return new UserDetailsService() {
+
+			@Override
+			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+				Player player = players.findByUsername(username);
+				if(player != null) {
+					return new User(player.getUsername(), player.getPassword(), true, true, true, true, AuthorityUtils.createAuthorityList("USER"));
+				} else {
+					throw new UsernameNotFoundException("Could not find the user: "	+ username + ".");
+				}
+			}
+		};
+	}
+}
+
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+				.authorizeRequests()
+					.antMatchers("/api/**", "/assets/**", "/games.html").permitAll()
+					.anyRequest().authenticated()
+					.and()
+				.formLogin()
+					//.loginPage("/login.html")
+					.defaultSuccessUrl("/games.html")
+					//.failureUrl("/login.html?error=true")
+					.permitAll()
+					.and()
+				.logout()
+					.logoutUrl("/logout")
+					.logoutSuccessUrl("/goodbye");
+
 	}
 }

@@ -18,7 +18,10 @@ public class Player {
 
     public Player() {}
 
-    public Player(String username) {this.username = username;}
+    public Player(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public long getId() {return id;}
 
