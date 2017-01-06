@@ -1,3 +1,7 @@
+body {
+    font-family: sans-serif;
+}
+
 td {
     border: solid black 1px;
     height: 25px;
@@ -38,4 +42,113 @@ th {
 
 #leaderBoard {
     text-align: center;
+    color: whitesmoke;
+    width: 100%;
+}
+
+#leaderBoard td {
+    vertical-align: middle;
+    font-size: 10px;
+}
+
+/* GENERAL GAME CSS */
+
+header {
+    height: 100px;
+    background: cadetblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header button, nav button {
+    height: 30px;
+    border-radius: 5px;
+    border: solid whitesmoke 1px;
+    margin: 10px;
+    width: 120px;
+    padding: 5px;
+}
+
+#loginBtn {
+    background: green;
+}
+
+.orangeBtn {
+    background: orange;
+}
+
+h1 {
+    padding: 10px;
+    font-size: 50px;
+    font-family: fantasy;
+    color: whitesmoke;
+    align-self: flex-start;
+}
+
+footer {
+    line-height: 100px;
+    background: cadetblue;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+/* GAME PANEL CSS */
+
+h2 {
+    font-size: 14px;
+    background: cadetblue;
+    padding: 5px;
+    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+    color: whitesmoke;
+}
+
+.user {
+    padding: 20px;
+    width: 220px;
+}
+
+.user img, nav img {
+    height: 60px;
+}
+
+.date {
+    font-size: 10px;
+}
+
+#games {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+
+.gameBlock {
+    text-align: center;
+    border: solid black 1px;
+    margin: 5px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    background: rgb(224, 248, 249);
+    font-size: 12px;
+}
+
+.gameParticipants {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* MANAGER PAGE CSS */
+
+#manager {
+    display: flex;
+}
+
+#manager nav {
+    text-align: center;
+    background: rgb(46, 94, 104);
+    max-width: 500px;
+    min-width: 300px;
 }

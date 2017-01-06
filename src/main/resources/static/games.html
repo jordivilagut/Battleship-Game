@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Battleship</title>
-    <link rel="stylesheet" href="assets/styles/styles.css">
-</head>
-<body>
+    <head>
+        <title>Battleship</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets/styles/reset.css">
+        <link rel="stylesheet" href="assets/styles/styles.css">
+    </head>
+    <body>
 
-<h1>Games List</h1>
-<ol id="gamesList"></ol>
-<h2>Leaderboard</h2>
-<table id="leaderBoard">
-    <thead>
-        <th>User</th>
-        <th>Total</th>
-        <th>W</th>
-        <th>L</th>
-        <th>T</th>
-    </thead>
-</table>
+        <header>
+            <h1>Battleship</h1>
+            <div>
+                <button id="loginBtn">Log In</button>
+                <button id="registerBtn" class="orangeBtn">Register</button>
+            </div>
+        </header>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
-<script src="assets/scripts/games.js"></script>
-</body>
+        <div id="games"></div>
+
+        <footer>@Battleship 2017</footer>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+        <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+        <script src="assets/scripts/games_panel.js"></script>
+        <script src="assets/scripts/games.js"></script>
+    </body>
 </html>
