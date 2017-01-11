@@ -31,6 +31,7 @@ public class SalvoApplication {
 	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, ParticipationRepository participationRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
 		return (args) -> {
 			Date date = new Date();
+			System.out.println(date);
 
 			Player player1 = playerRepository.save(new Player("j.bauer@ctu.gov", "24"));
 			Player player2 = playerRepository.save(new Player("c.obrian@ctu.gov", "42"));
@@ -133,53 +134,3 @@ public class SalvoApplication {
 	}
 }
 
-@Configuration
-class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
-	@Autowired
-	PlayerRepository players;
-
-	@Override
-	public void init(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService());
-	}
-
-	@Bean
-	UserDetailsService userDetailsService() {
-		return new UserDetailsService() {
-
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				Player player = players.findByUsername(username);
-				if(player != null) {
-					return new User(player.getUsername(), player.getPassword(), true, true, true, true, AuthorityUtils.createAuthorityList("USER"));
-				} else {
-					throw new UsernameNotFoundException("Could not find the user: "	+ username + ".");
-				}
-			}
-		};
-	}
-}
-
-@EnableWebSecurity
-@Configuration
-class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-				.authorizeRequests()
-					.antMatchers("/api/**", "/assets/**", "/games.html").permitAll()
-					.anyRequest().authenticated()
-					.and()
-				.formLogin()
-					//.loginPage("/login.html")
-					.defaultSuccessUrl("/games.html")
-					//.failureUrl("/login.html?error=true")
-					.permitAll()
-					.and()
-				.logout()
-					.logoutUrl("/logout")
-					.logoutSuccessUrl("/goodbye");
-
-	}
-}

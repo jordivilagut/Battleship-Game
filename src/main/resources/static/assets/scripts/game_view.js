@@ -1,6 +1,7 @@
 createGrid("topGrid");
 createGrid("bottomGrid");
 getViewData();
+$("#toGames").click(function() {window.location.href = "/manager.html"});
 
 function createGrid(element){
     var rows = 10;
@@ -43,36 +44,43 @@ function getViewData() {
     $.get("api/game_view/" + id)
         .done(function(data) {
 
-            var ships = data.ships;
-            var userSalvos = data.players.filter(function(player) {return player.id == id;})[0].salvos;
-            var opponentSalvos = data.players.filter(function(player) {return player.id != id;})[0].salvos;
+        var ships = data.ships;
+        var user = data.players.filter(function(player) {return player.id == id;})[0];
+        var username = user.player.username;
+        var userSalvos = user.salvos;
+        var opponent = data.players.filter(function(player) {return player.id != id;})[0];
+        var opponentName = "opponent";
+        var opponentSalvos = [];
+        
+        if(opponent !== undefined) {
+            opponentSalvos = opponent.salvos;
+            opponentName = opponent.player.username;
+        }
 
-            printElement(ships, "top", "ship");
-            printElement(userSalvos, "bottom", "salvo");
-            printElement(opponentSalvos, "top", "hiddenSalvo");
-            printViewData(data.players, id);
-            printHits();
+        printElement(ships, "top", "ship");
+        printElement(userSalvos, "bottom", "salvo");
+        printElement(opponentSalvos, "top", "hiddenSalvo");
+        printViewData(username, opponentName);
+        printHits();
     })
         .fail(function( jqXHR, textStatus ) {
-            console.log("Request Failed");
+        console.log("Request Failed");
     });
 }
 
 function printElement(element, grid, css) {
     element.forEach(function(item){
         var loc = item.locations;
-            loc.forEach(function(location) {
-                $("#" + grid + "Grid" + location).addClass(css);
-                $("#" + grid + "Grid" + location).text(item.turn);
-            })
+        loc.forEach(function(location) {
+            $("#" + grid + "Grid" + location).addClass(css);
+            $("#" + grid + "Grid" + location).text(item.turn);
+        })
     })
 }
 
-function printViewData(players, id) {
-    var user = players.filter(function(user) {return user.id == id});
-    var opponent = players.filter(function(user) {return user.id != id});
-    $("#user").html(user[0].player.username);
-    $("#opponent").html(opponent[0].player.username);
+function printViewData(user, opponent) {
+    $("#user").html(user);
+    $("#opponent").html(opponent);
 }
 
 function printHits() {

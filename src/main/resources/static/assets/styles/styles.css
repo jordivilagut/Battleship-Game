@@ -14,6 +14,15 @@ th {
     width: 20px;
 }
 
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.hidden {
+    display: none;
+}
+
 .ship {
     background-color: black;
 }
@@ -48,7 +57,7 @@ th {
 
 #leaderBoard td {
     vertical-align: middle;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 /* GENERAL GAME CSS */
@@ -62,15 +71,15 @@ header {
 }
 
 header button, nav button {
-    height: 30px;
+    height: 40px;
     border-radius: 5px;
     border: solid whitesmoke 1px;
     margin: 10px;
-    width: 120px;
+    width: 180px;
     padding: 5px;
 }
 
-#loginBtn {
+#loginPrompt {
     background: green;
 }
 
@@ -94,11 +103,30 @@ footer {
     margin-top: 20px;
 }
 
+#login, #register {
+    background: rgba(0,0,0,0.5);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    margin: auto;
+    background: whitesmoke;
+    border-radius: 20px;
+    border: solid cadetblue 2px;
+    padding: 40px;
+    margin-top: 150px;
+}
+
 
 /* GAME PANEL CSS */
 
 h2 {
-    font-size: 14px;
+    font-size: 16px;
     background: cadetblue;
     padding: 5px;
     border-radius: 10px 10px 0 0;
@@ -107,8 +135,8 @@ h2 {
 }
 
 .user {
-    padding: 20px;
-    width: 220px;
+    padding: 30px;
+    width: 260px;
 }
 
 .user img, nav img {
@@ -116,7 +144,7 @@ h2 {
 }
 
 .date {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 #games {
@@ -132,7 +160,7 @@ h2 {
     padding-bottom: 10px;
     border-radius: 10px;
     background: rgb(224, 248, 249);
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .gameParticipants {

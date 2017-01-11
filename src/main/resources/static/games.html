@@ -9,11 +9,27 @@
     </head>
     <body>
 
+        <div id="login" class="hidden">
+            <form id="loginForm">
+                <input type="text" placeholder="username" id="userLogIn">
+                <input type="password" placeholder="password" id="passwordLogIn">
+                <input type="submit" value="Log In">
+            </form>
+        </div>
+        
+        <div id="register" class="hidden">
+            <form id="registerForm">
+                <input type="text" placeholder="username" id="userRegister">
+                <input type="password" placeholder="password" id="passwordRegister">
+                <input type="submit" value="Sign Up">
+            </form>
+        </div>
+
         <header>
             <h1>Battleship</h1>
             <div>
-                <button id="loginBtn">Log In</button>
-                <button id="registerBtn" class="orangeBtn">Register</button>
+                <button id="loginPrompt">Log In</button>
+                <button id="registerPrompt" class="orangeBtn">Register</button>
             </div>
         </header>
 
@@ -24,6 +40,5 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
         <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
         <script src="assets/scripts/games_panel.js"></script>
-        <script src="assets/scripts/games.js"></script>
     </body>
 </html>
