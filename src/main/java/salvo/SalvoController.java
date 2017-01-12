@@ -28,7 +28,7 @@ public class SalvoController {
     @RequestMapping("/games")
     public Map<String, Object> getGamesInfo(Authentication auth) {
         Map<String, Object> gamesInfo = new LinkedHashMap<>();
-        gamesInfo.put("player", getUser(auth));
+        gamesInfo.put("player", getUsername(auth));
         gamesInfo.put("games", games.findAll().stream().map(game -> getGameDTO(game)).collect(toList()));
         return gamesInfo;
     }
@@ -36,7 +36,7 @@ public class SalvoController {
     @RequestMapping(path = "/games", method = RequestMethod.POST)
     public ResponseEntity<Map<String,Object>> createUser(@RequestParam Date timeStamp, Authentication auth) {
         Game game = new Game(timeStamp);
-        Player user = players.findByUsername(auth.getName());
+        Player user = getUser(auth);
         Participation participation = new Participation(timeStamp, game, user);
         games.save(game);
         participations.save(participation);
@@ -62,8 +62,8 @@ public class SalvoController {
             return new ResponseEntity<>("No password given", HttpStatus.FORBIDDEN);
         }
 
-        Player user = players.findByUsername(username);
-        if (user != null) {
+        Player player = players.findByUsername(username);
+        if (player != null) {
             return new ResponseEntity<>("Name already used", HttpStatus.CONFLICT);
         }
 
@@ -75,7 +75,7 @@ public class SalvoController {
     public ResponseEntity<Map<String, Object>> getGameView(@PathVariable("id") long id, Authentication auth) {
         Participation participation = participations.findOne(id);
         String player = participation.getPlayer().getUsername();
-        String user = getUser(auth);
+        String user = getUsername(auth);
 
         if(user == player){return new ResponseEntity<>(getViewDTO(participation), HttpStatus.ACCEPTED);}
         else{return new ResponseEntity<>(makeMap("error", "Unauthorized path."), HttpStatus.UNAUTHORIZED);}
@@ -83,9 +83,9 @@ public class SalvoController {
 
     @RequestMapping(path = "/games/{gameId}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(@PathVariable("gameId") Long gameId, @RequestParam Date timeStamp, Authentication auth) {
-        String username = getUser(auth);
+        String username = getUsername(auth);
         Game game = games.findOne(gameId);
-        Player user = players.findByUsername(auth.getName());
+        Player user = getUser(auth);
         int playersInGame = game.getParticipations().size();
 
         if (username == null || username.isEmpty()) {
@@ -109,6 +109,20 @@ public class SalvoController {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put(key, value);
         return map;
+    }
+
+    private Player getUser(Authentication auth) {
+        if (auth != null) {
+            return players.findByUsername(auth.getName());
+        }
+        return null;
+    }
+
+    private String getUsername(Authentication auth) {
+        if (auth != null) {
+            return getUser(auth).getUsername();
+        }
+        return "guest";
     }
 
     public Map<String, Object> getGameDTO(Game game) {
@@ -160,13 +174,5 @@ public class SalvoController {
         dto.put("turn", salvo.getTurn());
         dto.put("locations", salvo.getLocations());
         return dto;
-    }
-
-    private String getUser(Authentication auth) {
-        if (auth != null) {
-            return players.findByUsername(auth.getName()).getUsername();
-        } else {
-            return "guest";
-        }
     }
 }

@@ -20,12 +20,11 @@ class WebSecurityService extends WebSecurityConfigurerAdapter {
 		http
 				.authorizeRequests()
 					.antMatchers("/api/**", "/assets/**", "/games.html").permitAll()
+					.antMatchers("/rest/**").denyAll()
+					//.antMatchers("/games.html").hasRole("GUEST")
 					.anyRequest().authenticated()
 					.and()
 				.formLogin()
-					//.loginPage("/games.html")
-					//.defaultSuccessUrl("/manager.html")
-					//.failureUrl("/login.html?error=true")
 					.permitAll()
 					.and()
 				.logout()
@@ -34,16 +33,12 @@ class WebSecurityService extends WebSecurityConfigurerAdapter {
 					.and()
 				.csrf().disable();//Disabling CSRF is a bad practice. A new CSRF security protocol should be defined.
 
-		// if user is not authenticated, just send an authentication failure response
 		http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
-		// if login is successful, just clear the flags asking for authentication
 		http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
 
-		// if login fails, just send an authentication failure response
 		http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
-		// if logout is successful, just send a success response
 		http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 	}
 

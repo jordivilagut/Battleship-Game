@@ -33,7 +33,6 @@ function loadGames() {
         var user = gameInfo.player;
         var games = gameInfo.games;
         printGameTags(user, games);
-        if(user != "guest")printCurrentUserInfo(user);
     })
         .fail(function( jqXHR, textStatus ) {
         console.log( "Failed: " + textStatus );

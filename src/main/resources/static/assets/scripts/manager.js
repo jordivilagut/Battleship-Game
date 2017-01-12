@@ -1,4 +1,5 @@
 loadPlayers();
+loadUser();
 $("#logout").click(logout);
 $("#newGame").click(createGame);
 
@@ -16,6 +17,17 @@ function loadPlayers() {
     $.get("api/players")
         .done(function(players) {
         showLeaderBoard(players);
+    })
+        .fail(function( jqXHR, textStatus ) {
+        console.log( "Failed: " + textStatus );
+    });
+}
+
+function loadUser() {
+    $.get("api/games")
+        .done(function(gameInfo) {
+        var user = gameInfo.player;
+        printCurrentUserInfo(user);
     })
         .fail(function( jqXHR, textStatus ) {
         console.log( "Failed: " + textStatus );
