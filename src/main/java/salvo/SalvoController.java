@@ -6,10 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -25,6 +24,12 @@ public class SalvoController {
     @Autowired
     private ParticipationRepository participations;
 
+    @Autowired
+    private ShipRepository ships;
+
+    @Autowired
+    private SalvoRepository salvos;
+
     @RequestMapping("/games")
     public Map<String, Object> getGamesInfo(Authentication auth) {
         Map<String, Object> gamesInfo = new LinkedHashMap<>();
@@ -34,11 +39,36 @@ public class SalvoController {
     }
 
     @RequestMapping(path = "/games", method = RequestMethod.POST)
-    public ResponseEntity<Map<String,Object>> createUser(@RequestParam Date timeStamp, Authentication auth) {
+    public ResponseEntity<Map<String,Object>> createGame(@RequestParam Date timeStamp, Authentication auth) {
         Game game = new Game(timeStamp);
         Player user = getUser(auth);
         Participation participation = new Participation(timeStamp, game, user);
         games.save(game);
+        participations.save(participation);
+        return new ResponseEntity<>(makeMap("participation", participation.getId()), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/games/{id}/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> joinGame(@PathVariable("id") Long id, @RequestParam Date timeStamp, Authentication auth) {
+        Player user = getUser(auth);
+        Game game = games.findOne(id);
+        String username = user.getUsername();
+
+        int playersInGame = game.getParticipations().size();
+
+        if (username == null || username.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error", "No user."), HttpStatus.UNAUTHORIZED);
+        }
+
+        if (id == null) {
+            return new ResponseEntity<>(makeMap("error", "Game doesn't exist.."), HttpStatus.FORBIDDEN);
+        }
+
+        if (playersInGame > 2) {
+            return new ResponseEntity<>(makeMap("error", "Game is full."), HttpStatus.FORBIDDEN);
+        }
+
+        Participation participation = new Participation(timeStamp, game, user);
         participations.save(participation);
         return new ResponseEntity<>(makeMap("participation", participation.getId()), HttpStatus.CREATED);
     }
@@ -81,28 +111,70 @@ public class SalvoController {
         else{return new ResponseEntity<>(makeMap("error", "Unauthorized path."), HttpStatus.UNAUTHORIZED);}
     }
 
-    @RequestMapping(path = "/games/{gameId}/players", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> joinGame(@PathVariable("gameId") Long gameId, @RequestParam Date timeStamp, Authentication auth) {
-        String username = getUsername(auth);
-        Game game = games.findOne(gameId);
+    @RequestMapping(path = "/game_view/{id}/ships", method = RequestMethod.POST)
+    public ResponseEntity<String> placeShip(@PathVariable("id") long id, @RequestBody Ship ship, Authentication auth) {
+        Participation participation = participations.findOne(id);
+        Player player = participation.getPlayer();
         Player user = getUser(auth);
-        int playersInGame = game.getParticipations().size();
+        List<String> occupiedLocations = participation.getShips().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
+        List<String> newLocations = ship.getLocations().stream().collect(toList());
+        List<String> placedShips = participation.getShips().stream().map(s -> s.getCategory()).collect(toList());
+        String newShip = ship.getCategory();
 
-        if (username == null || username.isEmpty()) {
-            return new ResponseEntity<>(makeMap("error", "No user."), HttpStatus.UNAUTHORIZED);
+        if(user == null || player == null) {
+            return new ResponseEntity<>("User not found.", HttpStatus.UNAUTHORIZED);
         }
 
-        if (gameId == null) {
-            return new ResponseEntity<>(makeMap("error", "Game doesn't exist.."), HttpStatus.FORBIDDEN);
+        if(user != player) {
+            return new ResponseEntity<>("Unauthorized user.", HttpStatus.UNAUTHORIZED);
         }
 
-        if (playersInGame > 2) {
-            return new ResponseEntity<>(makeMap("error", "Game is full."), HttpStatus.FORBIDDEN);
+        if(!Collections.disjoint(newLocations, occupiedLocations)) {
+            return new ResponseEntity<>("Invalid location.", HttpStatus.FORBIDDEN);
         }
 
-        Participation participation = new Participation(timeStamp, game, user);
-        participations.save(participation);
-        return new ResponseEntity<>(makeMap("participation", participation.getId()), HttpStatus.CREATED);
+        if(placedShips.stream().anyMatch(s -> s.trim().equals(newShip))) {
+            return new ResponseEntity<>("Already placed", HttpStatus.FORBIDDEN);
+        }
+
+        if(participation.getShips().size() > 4) {
+            return new ResponseEntity<>("Ships already placed.", HttpStatus.FORBIDDEN);
+        }
+
+        participation.addShip(ship);
+        ships.save(ship);
+        return new ResponseEntity<>("Ship placed successfully.", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/game_view/{id}/salvos", method = RequestMethod.POST)
+    public ResponseEntity<String> placeSalvo(@PathVariable("id") long id, @RequestBody Salvo salvo, Authentication auth) {
+        Participation participation = participations.findOne(id);
+        Player player = participation.getPlayer();
+        Player user = getUser(auth);
+        List<String> occupiedLocations = participation.getSalvos().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
+        List<String> newLocations = salvo.getLocations().stream().collect(toList());
+        List<Integer> registeredTurns = participation.getSalvos().stream().map(s -> s.getTurn()).collect(toList());
+        int newTurn = salvo.getTurn();
+
+        if(user == null || player == null) {
+            return new ResponseEntity<>("User not found.", HttpStatus.UNAUTHORIZED);
+        }
+
+        if(user != player) {
+            return new ResponseEntity<>("Unauthorized user.", HttpStatus.UNAUTHORIZED);
+        }
+
+        if(!Collections.disjoint(newLocations, occupiedLocations)) {
+            return new ResponseEntity<>("Invalid location.", HttpStatus.FORBIDDEN);
+        }
+
+        if(registeredTurns.contains(newTurn)) {
+            return new ResponseEntity<>("Invalid turn.", HttpStatus.FORBIDDEN);
+        }
+
+        participation.addSalvo(salvo);
+        salvos.save(salvo);
+        return new ResponseEntity<>("Salvos placed successfully.", HttpStatus.CREATED);
     }
 
     private Map<String, Object> makeMap(String key, Object value) {

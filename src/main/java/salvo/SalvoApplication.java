@@ -69,21 +69,21 @@ public class SalvoApplication {
 			List<String> location9 = Arrays.asList("B9", "C9", "D9");
 			List<String> location10 = Arrays.asList("C1", "C2");
 
-			Ship ship = new Ship("Carrier", location1);
+			Ship ship = new Ship("Aircraft Carrier", location1);
 			participation1.addShip(ship);
 			shipRepository.save(ship);
-			ship = new Ship("Submarine", location2);
+			ship = new Ship("Battleship", location2);
 			participation1.addShip(ship);
 			shipRepository.save(ship);
-			ship = new Ship("Destroyer", location3);
+			ship = new Ship("Submarine", location3);
 			participation1.addShip(ship);
 			shipRepository.save(ship);
-			ship = new Ship("Submarine", location4);
+			ship = new Ship("Destroyer", location4);
 			participation1.addShip(ship);
 			shipRepository.save(ship);
-			ship = new Ship("Destroyer", location5);
-			participation1.addShip(ship);
-			shipRepository.save(ship);
+			//ship = new Ship("Destroyer", location5);
+			//participation1.addShip(ship);
+			//shipRepository.save(ship);
 			ship = new Ship("Patrol", location6);
 			participation2.addShip(ship);
 			shipRepository.save(ship);

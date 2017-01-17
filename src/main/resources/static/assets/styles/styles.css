@@ -1,26 +1,155 @@
+/* THROUGH PROJECT CSS IMPLEMENTATION */
+
 body {
     font-family: sans-serif;
 }
 
-td {
-    border: solid black 1px;
-    height: 25px;
-    width: 25px;
+header {
+    height: 100px;
+    background: cadetblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-th {
-    border: solid black 1px;
-    height: 20px;
-    width: 20px;
+header button, nav button {
+    height: 40px;
+    border-radius: 5px;
+    border: solid whitesmoke 1px;
+    margin: 10px;
+    width: 180px;
+    padding: 5px;
 }
 
-a {
-    text-decoration: none;
-    color: black;
+footer {
+    line-height: 100px;
+    background: cadetblue;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 20px;
+}
+
+h1 {
+    padding: 10px;
+    font-size: 50px;
+    font-family: fantasy;
+    color: whitesmoke;
+    align-self: flex-start;
+}
+
+h2 {
+    font-size: 16px;
+    background: cadetblue;
+    padding: 5px;
+    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+    color: whitesmoke;
 }
 
 .hidden {
     display: none;
+}
+
+.orangeBtn {
+    background: orange;
+}
+
+.blueBtn {
+    background: midnightblue;
+    color: whitesmoke;
+}
+
+.redBtn {
+    background: darkred;
+    color: whitesmoke;
+}
+
+/* GAME VIEW CSS */
+
+#gameView {
+    display: flex;
+    justify-content: center;
+}
+
+#board {
+    margin: 10px;
+}
+
+#gameSettings {
+    margin: 10px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+#opponentInfo {
+    border: solid black 1px;
+    border-radius: 10px;
+    height: 60px;
+}
+
+#placedShips {
+    border: solid black 1px;
+    border-radius: 10px;
+    min-height: 60px;
+    padding-bottom: 20px;
+    margin-top: 10px;
+}
+
+#shipList li {
+    font-size: 12px;
+    margin: 4px;
+}
+
+#gameControls {
+    display: flex;
+    flex-direction: column;
+    border: solid black 1px;
+    border-radius: 10px;
+    margin: 10px 0 10px 0;
+}
+
+#gameControls select, #gameControls input, #orientation {
+    margin: 10px;
+}
+
+#orientation {
+    display: flex;
+    flex-direction: column;
+}
+
+#toGames, #fireSalvos, #placeShip {
+    border-radius: 10px;
+    height: 40px;
+}
+
+#fireSalvos:disabled, #placeShip:disabled {
+    opacity: 0.4;
+}
+
+/* GAME GRIDS CSS */
+
+#topGrid {
+    margin-bottom: 20px;
+}
+
+#topGrid td, #bottomGrid td, #topGrid th, #bottomGrid th {
+    border: solid black 1px;
+    height: 25px;
+    width: 25px;
+    vertical-align: middle;
+}
+
+#topGrid th, #bottomGrid th {
+    background: lightblue;
+}
+
+.preSelected {
+    background: dimgray;
+}
+
+.wrongSelected {
+    background: rgb(239, 119, 127);
 }
 
 .ship {
@@ -40,67 +169,10 @@ a {
     font-size: 18px;
 }
 
-#gamesList table {
-    border: solid black 1px;
-    text-align: center;
-}
-
-#gamesList th {
-    padding: 5px;
-}
-
-#leaderBoard {
-    text-align: center;
-    color: whitesmoke;
-    width: 100%;
-}
-
-#leaderBoard td {
-    vertical-align: middle;
-    font-size: 12px;
-}
-
-/* GENERAL GAME CSS */
-
-header {
-    height: 100px;
-    background: cadetblue;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-header button, nav button {
-    height: 40px;
-    border-radius: 5px;
-    border: solid whitesmoke 1px;
-    margin: 10px;
-    width: 180px;
-    padding: 5px;
-}
+/* HOME PAGE CSS */
 
 #loginPrompt {
     background: green;
-}
-
-.orangeBtn {
-    background: orange;
-}
-
-h1 {
-    padding: 10px;
-    font-size: 50px;
-    font-family: fantasy;
-    color: whitesmoke;
-    align-self: flex-start;
-}
-
-footer {
-    line-height: 100px;
-    background: cadetblue;
-    color: whitesmoke;
-    text-align: center;
-    margin-top: 20px;
 }
 
 #login, #register {
@@ -110,7 +182,7 @@ footer {
     width: 100%;
 }
 
-form {
+#loginForm, #registerForm {
     display: flex;
     flex-direction: column;
     width: 200px;
@@ -122,17 +194,7 @@ form {
     margin-top: 150px;
 }
 
-
 /* GAME PANEL CSS */
-
-h2 {
-    font-size: 16px;
-    background: cadetblue;
-    padding: 5px;
-    border-radius: 10px 10px 0 0;
-    font-weight: bold;
-    color: whitesmoke;
-}
 
 .user {
     padding: 30px;
@@ -163,12 +225,17 @@ h2 {
     font-size: 14px;
 }
 
+.gameBlock a {
+    text-decoration: none;
+    color: black;
+}
+
 .gameParticipants {
     display: flex;
     justify-content: space-between;
 }
 
-/* MANAGER PAGE CSS */
+/* MANAGER SCREEN CSS */
 
 #manager {
     display: flex;
@@ -179,4 +246,15 @@ h2 {
     background: rgb(46, 94, 104);
     max-width: 500px;
     min-width: 300px;
+}
+
+#leaderBoard {
+    text-align: center;
+    color: whitesmoke;
+    width: 100%;
+}
+
+#leaderBoard td {
+    vertical-align: middle;
+    font-size: 12px;
 }
