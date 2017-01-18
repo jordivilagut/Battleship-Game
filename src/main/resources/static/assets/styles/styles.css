@@ -1,39 +1,109 @@
+/* TODO BUG TO FIX: */
+/* You can place ships on the outter cells which are the headers. */
+
+/* IMPORTED FONTS */
+
+@font-face {
+    font-family: "Duedate";
+    src: url("../fonts/DueDate.ttf") format("truetype");
+}
+
 /* THROUGH PROJECT CSS IMPLEMENTATION */
 
 body {
     font-family: sans-serif;
+    background: rgb(37, 39, 43);
+    box-shadow: inset 0 0 100px;
+    min-height: 100vh;
 }
 
 header {
-    height: 100px;
-    background: cadetblue;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 150px;
+    top: 0;
+    background: rgb(37, 39, 43);
+    box-shadow: 0 0 100px black, inset 0 0 100px rgb(158, 146, 129);
+    z-index: 2;
 }
 
-header button, nav button {
+.topGridCell, .bottomGridCell {
+    background-image: url("../images/sea_map.jpg");
+}
+
+.headerInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: rgb(158, 146, 129);
+}
+
+.pipe {
+    background: url("../images/pipe6.png");
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    top: 110px;
+    z-index: 3;
+}
+
+.pipe2 {
+    background: url("../images/pipe7.png");
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    bottom: 80px;
+    z-index: 3;
+}
+
+nav button {
     height: 40px;
     border-radius: 5px;
     border: solid whitesmoke 1px;
     margin: 10px;
     width: 180px;
     padding: 5px;
+    outline: none;
+}
+
+header button {
+    margin-right: 50px;
+    height: 40px;
+    border-radius: 5px;
+    border: solid black 1px;
+    width: 100px;
+    padding: 5px;
+    box-shadow: inset 0 0 10px black;
+    font-size: 16px;
+    outline: none;
+}
+
+#registerPrompt {
+    background: rgb(158, 146, 129);
 }
 
 footer {
     line-height: 100px;
-    background: cadetblue;
-    color: whitesmoke;
+    background: rgb(37, 39, 43);
+    color: rgb(158, 146, 129);
     text-align: center;
     margin-top: 20px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 0 100px black, inset 0 0 100px rgb(158, 146, 129);
+    z-index: 2;
 }
 
 h1 {
     padding: 10px;
-    font-size: 50px;
-    font-family: fantasy;
-    color: whitesmoke;
+    font-size: 60px;
+    font-family: "Duedate", sans-serif;
+    color: rgb(158, 146, 129);
     align-self: flex-start;
 }
 
@@ -44,10 +114,17 @@ h2 {
     border-radius: 10px 10px 0 0;
     font-weight: bold;
     color: whitesmoke;
+    box-shadow: inset 0 0 10px black;
 }
 
 .hidden {
     display: none;
+}
+
+.active {
+    background: orange;
+    box-shadow: 0 0 10px black;
+    outline: none;
 }
 
 .orangeBtn {
@@ -55,7 +132,7 @@ h2 {
 }
 
 .blueBtn {
-    background: midnightblue;
+    background: rgb(6, 71, 89);
     color: whitesmoke;
 }
 
@@ -64,11 +141,35 @@ h2 {
     color: whitesmoke;
 }
 
+.whiteBtn {
+    background: whitesmoke;
+}
+
+#userInfo {
+    padding-top: 180px;
+}
+
+#games {
+    padding: 180px 100px 200px 100px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
 /* GAME VIEW CSS */
 
 #gameView {
+    padding: 180px 0 200px 0;
+    margin: auto;
     display: flex;
     justify-content: center;
+}
+
+#shipGridBtn, #salvoGridBtn {
+    border: none;
+    border-radius: 5px 5px 0 0;
+    padding: 3px 5px 2px 5px;
+    margin-right: 2px;
 }
 
 #board {
@@ -76,21 +177,28 @@ h2 {
 }
 
 #gameSettings {
-    margin: 10px;
+    margin: 30px 10px 10px 10px;
     width: 200px;
     display: flex;
     flex-direction: column;
 }
 
-#opponentInfo {
+#opponentInfo, #placedShips, #gameControls {
     border: solid black 1px;
     border-radius: 10px;
+    background: rgb(158, 146, 129);
+    box-shadow: inset 0 0 10px black;
+}
+
+#opponentInfo {
     height: 60px;
 }
 
+#opponentInfo p {
+    margin: 5px;
+}
+
 #placedShips {
-    border: solid black 1px;
-    border-radius: 10px;
     min-height: 60px;
     padding-bottom: 20px;
     margin-top: 10px;
@@ -104,8 +212,6 @@ h2 {
 #gameControls {
     display: flex;
     flex-direction: column;
-    border: solid black 1px;
-    border-radius: 10px;
     margin: 10px 0 10px 0;
 }
 
@@ -118,30 +224,51 @@ h2 {
     flex-direction: column;
 }
 
-#toGames, #fireSalvos, #placeShip {
+#toGames, #fireSalvos, #placeShip, #newGame, .joinBtnFrame button {
     border-radius: 10px;
     height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    border: solid black 1px;
+    box-shadow: inset 0 0 10px black;
+}
+
+.joinBtnFrame button {
+    width: 100px;
+    height: 30px;
+    border: none;
+}
+
+#newGame {
+    border-radius: 5px;
+    border: none;
+}
+
+#toGames {
+    background: orange;
+    border: solid black 1px;
+    box-shadow: inset 0 0 10px black;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 #fireSalvos:disabled, #placeShip:disabled {
-    opacity: 0.4;
+    opacity: 0.2;
 }
 
 /* GAME GRIDS CSS */
 
-#topGrid {
-    margin-bottom: 20px;
-}
-
 #topGrid td, #bottomGrid td, #topGrid th, #bottomGrid th {
     border: solid black 1px;
-    height: 25px;
-    width: 25px;
+    height: 45px;
+    width: 45px;
     vertical-align: middle;
+    box-shadow: inset 0 0 5px black;
 }
 
 #topGrid th, #bottomGrid th {
-    background: lightblue;
+    background: rgb(89, 58, 32);
+    box-shadow: inset 0 0 10px black;
 }
 
 .preSelected {
@@ -153,7 +280,7 @@ h2 {
 }
 
 .ship {
-    background-color: black;
+    background: black;
 }
 
 .hiddenSalvo {
@@ -161,7 +288,7 @@ h2 {
 }
 
 .salvo {
-    background-image: url("../images/salvo.jpg");
+    background: url("../images/salvo3.png");
     background-size: cover;
     color: black;
     text-align: right;
@@ -170,10 +297,6 @@ h2 {
 }
 
 /* HOME PAGE CSS */
-
-#loginPrompt {
-    background: green;
-}
 
 #login, #register {
     background: rgba(0,0,0,0.5);
@@ -191,13 +314,14 @@ h2 {
     border-radius: 20px;
     border: solid cadetblue 2px;
     padding: 40px;
-    margin-top: 150px;
+    margin-top: 200px;
+    z-index: 4;
 }
 
 /* GAME PANEL CSS */
 
 .user {
-    padding: 30px;
+    padding: 20px 30px 10px 30px;
     width: 260px;
 }
 
@@ -209,25 +333,17 @@ h2 {
     font-size: 12px;
 }
 
-#games {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 5px;
-}
-
 .gameBlock {
     text-align: center;
     border: solid black 1px;
     margin: 5px;
     padding-bottom: 10px;
     border-radius: 10px;
-    background: rgb(224, 248, 249);
+    background: rgb(158, 146, 129);
     font-size: 14px;
-}
-
-.gameBlock a {
     text-decoration: none;
     color: black;
+    box-shadow: inset 0 0 10px black;
 }
 
 .gameParticipants {
@@ -239,22 +355,36 @@ h2 {
 
 #manager {
     display: flex;
+    margin-right: 350px;
 }
 
 #manager nav {
     text-align: center;
     background: rgb(46, 94, 104);
-    max-width: 500px;
-    min-width: 300px;
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    z-index: 1;
+    box-shadow: inset 0 0 40px black;
 }
 
 #leaderBoard {
     text-align: center;
-    color: whitesmoke;
+    background: rgb(158, 146, 129);
+    color: auto;
     width: 100%;
 }
 
 #leaderBoard td {
     vertical-align: middle;
-    font-size: 12px;
+    font-size: 14px;
+    border: solid rgb(89, 58, 32) 1px;
+    padding: 10px 5px 10px 5px;
+    box-shadow: inset 0 0 5px black;
 }
+
+.joinBtnFrame {
+    height: 40px;
+}
+

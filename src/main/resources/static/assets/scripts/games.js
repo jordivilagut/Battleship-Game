@@ -59,20 +59,25 @@ function printGameTags(user, games) {
         var player1 = createPlayerProfile(name1.slice(0,14), avatar1);
         var player2 = createPlayerProfile(name2.slice(0,14), avatar2);
 
+        if(participants.length < 2 && (user != "guest" && user != name1)) {
+            var joinButton = $("<div></div>")
+            .addClass("joinBtnFrame")
+            .append($("<button></button>")
+                    .addClass("whiteBtn")
+                    .attr("onclick","return joinGame(this);")
+                    .attr("value","joinGame" + game.id)
+                    .text("Join"));
+        }else{ var joinButton = $("<div></div>")
+        .addClass("joinBtnFrame");}
+
         var gameHTML = $("<a></a>").attr("href", url).addClass("gameBlock")
         .append($("<h2></h2>").text(header))
         .append($("<div></div>").addClass("gameParticipants")
                 .append($("<div></div>").html(player1)).addClass("user")
                 .append($("<p></p>").text("vs"))
                 .append($("<div></div>").html(player2)).addClass("user"))
+        .append(joinButton)
         .append($("<p></p>").text(date).addClass("date"));
-
-        if(participants.length < 2 && (user != "guest" && user != name1)) {
-            gameHTML.append($("<button></button>")
-                            .attr("onclick","return joinGame(this);")
-                            .attr("value","joinGame" + game.id)
-                            .text("Join"));
-        }
 
         $("#games").append(gameHTML);
     });

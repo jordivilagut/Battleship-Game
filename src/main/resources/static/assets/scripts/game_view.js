@@ -33,6 +33,15 @@ function activateButtons() {
     $("#placeShip").click(placeShip);
     $("#fireSalvos").click(placeSalvos);
     $("#shipType").change(deselectAll);
+    $("#shipGridBtn").click(toggleGrid);
+    $("#salvoGridBtn").click(toggleGrid);
+}
+
+function toggleGrid() {
+    $("#topGrid").toggleClass("hidden");
+    $("#bottomGrid").toggleClass("hidden");
+    $("#shipGridBtn").toggleClass("active");
+    $("#salvoGridBtn").toggleClass("active");
 }
 
 function enablePlacingShips() {
@@ -219,7 +228,6 @@ function getViewData() {
 function getPlacedShips(ships) {
     $("#shipList").html("");
     ships.forEach(function(ship) {
-        console.log(ship.category);
         $("#shipList").append($("<li></li>").text(ship.category));
     })
 }
@@ -301,6 +309,7 @@ function placeSalvos(event) {
     })
         .done(function (response, status, jqXHR) {
         window.location.href = "/game_view.html?part=" + partId;
+        //$("#salvoGridBtn").click();
         console.log(response);
     })
         .fail(function (jqXHR, status, httpError) {

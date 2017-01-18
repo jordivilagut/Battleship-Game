@@ -9,14 +9,19 @@
     <body>
 
         <header>
-            <h1>Battleship</h1>
-            <p>You are logged in as <span id="user">User</span>.</p>
+            <div class="headerInfo">
+                <h1>Battleship</h1>
+                <p>You are logged in as <span id="user">User</span>.</p>
+            </div>
         </header>
+        <div class="pipe"></div>
+
 
         <div id="gameView">
             <div id="board">
+                <button id="shipGridBtn" class="active">Ships</button><button id="salvoGridBtn">Salvos</button>
                 <table id="topGrid"></table>
-                <table id="bottomGrid"></table>
+                <table id="bottomGrid" class="hidden"></table>
             </div>
             <div id="gameSettings">
                 <div id="opponentInfo">
@@ -51,11 +56,14 @@
                     <input type="button" class="redBtn" id="fireSalvos" value="Fire" disabled>
                 </div>
 
-                <button id="toGames" class="orangeBtn">Back to Games</button>
+                <button id="toGames">Back to Games</button>
             </div>
         </div>
-
-        <footer>@Battleship 2017</footer>
+        
+        <div class="pipe2"></div>
+        <footer>
+        @Battleship 2017
+        </footer>
 
         <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
         <script src="assets/scripts/game_view.js"></script>
