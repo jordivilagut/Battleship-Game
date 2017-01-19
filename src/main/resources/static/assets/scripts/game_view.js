@@ -46,6 +46,7 @@ function toggleGrid() {
 
 function enablePlacingShips() {
     $(".topGridCell").click(selectShipPosition);
+    $("th").unbind("click");
 }
 
 function enablePlacingSalvos() {

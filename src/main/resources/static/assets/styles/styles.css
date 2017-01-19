@@ -1,6 +1,3 @@
-/* TODO BUG TO FIX: */
-/* You can place ships on the outter cells which are the headers. */
-
 /* IMPORTED FONTS */
 
 @font-face {
@@ -32,6 +29,7 @@ header {
 
 .topGridCell, .bottomGridCell {
     background-image: url("../images/sea_map.jpg");
+    background-size: cover;
 }
 
 .headerInfo {
@@ -288,7 +286,7 @@ h2 {
 }
 
 .salvo {
-    background: url("../images/salvo3.png");
+    background: url("../images/salvo4.png");
     background-size: cover;
     color: black;
     text-align: right;
