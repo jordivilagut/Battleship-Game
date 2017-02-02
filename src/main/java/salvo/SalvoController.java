@@ -243,7 +243,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<>();
 
         dto.put("category", ship.getCategory());
-        dto.put("hits", hits);
+        dto.put("locations", hits);
         dto.put("left", leftLocations);
         dto.put("sunk", leftLocations == 0);
 

@@ -18,24 +18,11 @@
 
 
         <div id="gameView">
-            <div id="board">
-                <button id="shipGridBtn" class="active">Ships</button><button id="salvoGridBtn">Salvos</button>
-                <table id="topGrid"></table>
-                <table id="bottomGrid" class="hidden"></table>
-            </div>
-            <div id="gameSettings">
+            <div class="gameSettings">
                 <div id="opponentInfo">
                     <h2>Your Enemy:</h2>
                     <p id="opponent">Opponent</p>
                 </div>
-
-                <div id="placedShips">
-                    <h2>Placed Ships:</h2>
-                    <ul id="shipList">
-
-                    </ul>
-                </div>
-
                 <div id="gameControls">
                     <h2>Game Controls: </h2>
                     <form>
@@ -55,14 +42,54 @@
                     <input type="button" class="blueBtn" id="placeShip" value="Place Ship" disabled>
                     <input type="button" class="redBtn" id="fireSalvos" value="Fire" disabled>
                 </div>
+            </div>
+
+            <div id="board">
+                <button id="shipGridBtn" class="active">Ships</button><button id="salvoGridBtn">Salvos</button>
+                <table id="topGrid"></table>
+                <table id="bottomGrid" class="hidden"></table>
+            </div>
+            <div class="gameSettings">
+
+                <div class="placedShips">
+                    <h2>Your Ships:</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ship</th>
+                                <th>Hits</th>
+                                <th>Left</th>
+                                <th>Sunk</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shipList">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="placedShips">
+                    <h2>Opponent's Ships:</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ship</th>
+                                <th>Hits</th>
+                                <th>Left</th>
+                                <th>Sunk</th>
+                            </tr>
+                        </thead>
+                        <tbody id="opponentShipList">
+
+                        </tbody>
+                    </table>
+                </div>
 
                 <button id="toGames">Back to Games</button>
             </div>
         </div>
-        
+
         <div class="pipe2"></div>
         <footer>
-        @Battleship 2017
+            @Battleship 2017
         </footer>
 
         <script src="https://code.jquery.com/jquery-2.2.0.js"></script>

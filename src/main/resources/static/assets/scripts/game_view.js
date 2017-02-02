@@ -203,33 +203,43 @@ function getViewData() {
         var user = data.players.filter(function(player) {return player.id == id;})[0];
         var username = user.player.username;
         var userSalvos = user.salvos;
+        var userHits = user.hitShips;
         var opponent = data.players.filter(function(player) {return player.id != id;})[0];
         var opponentName = "opponent";
         var opponentSalvos = [];
+        var opponentHits = [];
 
-        getPlacedShips(ships);
         if(shipNumber > 4) {disablePlacingShips();}
 
         if(opponent !== undefined) {
             opponentSalvos = opponent.salvos;
             opponentName = opponent.player.username;
+            opponentHits = opponent.hitShips;
         }
+        
+        printPlacedShips(opponentHits, "#shipList");
+        printPlacedShips(userHits, "#opponentShipList");
 
         printElement(ships, "top", "ship");
         printElement(userSalvos, "bottom", "salvo");
         printElement(opponentSalvos, "top", "hiddenSalvo");
+        printElement(opponentHits, "top", "hit");
+        printElement(userHits, "bottom", "hit");
         printViewData(username, opponentName);
-        printHits();
     })
         .fail(function( jqXHR, textStatus ) {
         console.log("Request Failed");
     });
 }
 
-function getPlacedShips(ships) {
-    $("#shipList").html("");
+function printPlacedShips(ships, element) {
+    $(element).html("");
     ships.forEach(function(ship) {
-        $("#shipList").append($("<li></li>").text(ship.category));
+        $(element).append($("<tr></tr>")
+                          .append($("<td></td>").html("<img src=\"assets/images/battleship.png\">"))
+                          .append($("<td></td>").text(ship.locations.length))
+                          .append($("<td></td>").text(ship.left))
+                          .append($("<td></td>").text(ship.sunk)));
     })
 }
 
@@ -246,20 +256,6 @@ function printElement(element, grid, css) {
 function printViewData(user, opponent) {
     $("#user").html(user);
     $("#opponent").html(opponent);
-}
-
-function printHits() {
-    var rowHeaders = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-
-    for(var i = 1; i <= 10; i++) {
-        for(var j = 0; j< 10; j++) {
-            var cell = "#topGrid" + rowHeaders[j] + i
-            if($(cell).hasClass("ship") && $(cell).hasClass("hiddenSalvo")) {
-                $(cell).removeClass("hiddenSalvo");
-                $(cell).addClass("salvo");
-            };
-        }
-    }
 }
 
 function getPreselectedLocations(grid) {
