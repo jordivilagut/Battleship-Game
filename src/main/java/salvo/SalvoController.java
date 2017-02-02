@@ -7,8 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -211,6 +209,7 @@ public class SalvoController {
         dto.put("player", getPlayerDTO(participation.getPlayer()));
         dto.put("score", participation.getScore());
         dto.put("salvos", participation.getSalvos().stream().map(salvo -> getSalvoDTO(salvo)).collect(toList()));
+        dto.put("hitShips", participation.getGame().getParticipations().stream().filter(p ->p.getId() != participation.getId()).map(p -> p.getShips().stream().map(s -> getHitShipDTO(s, participation)).collect(toList())).flatMap(p -> p.stream()).collect(toList()));
         return dto;
     }
 
@@ -231,6 +230,23 @@ public class SalvoController {
         dto.put("created", participation.getTimeStamp());
         dto.put("players", participation.getGame().getParticipations().stream().map(p -> getParticipationDTO(p)).collect(toList()));
         dto.put("ships", participation.getShips().stream().map(ship -> getShipDTO(ship)).collect(toList()));
+        return dto;
+    }
+
+    public Map<String, Object> getHitShipDTO(Ship ship, Participation participation) {
+
+        List<String> hits = participation.getSalvos().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
+        List<String> opponentShipPositions = ship.getLocations();
+        hits.retainAll(opponentShipPositions);
+        int leftLocations = ship.getLocations().size() - hits.size();
+
+        Map<String, Object> dto = new LinkedHashMap<>();
+
+        dto.put("category", ship.getCategory());
+        dto.put("hits", hits);
+        dto.put("left", leftLocations);
+        dto.put("sunk", leftLocations == 0);
+
         return dto;
     }
 
