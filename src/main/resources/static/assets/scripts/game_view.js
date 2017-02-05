@@ -1,6 +1,6 @@
-createGrid("topGrid");
-createGrid("bottomGrid");
-getViewData();
+createGrid("shipGrid");
+createGrid("salvoGrid");
+setInterval(getViewData, 3000);
 activateButtons();
 enablePlacingShips();
 enablePlacingSalvos();
@@ -27,47 +27,49 @@ var ships = [
         length: 2
     }
 ];
+var turn;
 
 function activateButtons() {
     $("#toGames").click(function() {window.location.href = "/manager.html"});
     $("#placeShip").click(placeShip);
     $("#fireSalvos").click(placeSalvos);
     $("#shipType").change(deselectAll);
-    $("#shipGridBtn").click(toggleGrid);
-    $("#salvoGridBtn").click(toggleGrid);
+    $("#shipGridBtn").click(changeGridDisplay);
+    $("#salvoGridBtn").click(changeGridDisplay);
 }
 
-function toggleGrid() {
-    $("#topGrid").toggleClass("hidden");
-    $("#bottomGrid").toggleClass("hidden");
+function changeGridDisplay() {
+    $("#shipGrid").toggleClass("hidden");
+    $("#salvoGrid").toggleClass("hidden");
     $("#shipGridBtn").toggleClass("active");
     $("#salvoGridBtn").toggleClass("active");
 }
 
 function enablePlacingShips() {
-    $(".topGridCell").click(selectShipPosition);
+    $(".shipGridCell").click(selectShipPosition);
     $("th").unbind("click");
 }
 
 function enablePlacingSalvos() {
-    $(".bottomGridCell").click(selectSalvoPosition);
+    $(".salvoGridCell").click(selectSalvoPosition);
+    $("th").unbind("click");
 }
 
 function disablePlacingShips() {
-    $(".topGridCell").unbind("click");
+    $(".shipGridCell").unbind("click");
     $("#shipType").prop("disabled", true);
     $("input[name=orientation]").prop("disabled", true);
     $("#placeShip").prop("disabled", true);
 }
 
 function disablePlacingSalvos() {
-    $(".bottomGridCell").unbind("click");
+    $(".salvoGridCell").unbind("click");
 }
 
 function selectShipPosition() {
-    $(".topGridCell").removeClass("preSelected");
-    $(".topGridCell").removeClass("wrongSelected");
-    var cellId = $(this).attr("id").slice(7);
+    $(".shipGridCell").removeClass("preSelected");
+    $(".shipGridCell").removeClass("wrongSelected");
+    var cellId = $(this).attr("id").slice(8);
     var orientation = $("input[name=orientation]:checked").val();
 
     if (orientation == "vertical") {
@@ -75,43 +77,6 @@ function selectShipPosition() {
     } else {
         selectSubsequentHorizontal(cellId);
     }
-}
-
-function selectSalvoPosition() {
-
-    var cellId = $(this).attr('id').slice(10);
-    getPreselectedSalvoLocations(cellId);
-
-    $(this).toggleClass("preSelected");
-
-}
-
-function getPreselectedSalvoLocations(cellId) {
-    var rows = 10;
-    var cols = 10;
-    var rowHeaders = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-    var preselectedSalvos = [];
-    
-    if(!$("#bottomGrid" + cellId).hasClass("preSelected")) {
-        preselectedSalvos.push(cellId);
-    }
-
-    for(var i = 1; i <= rows ; i++){
-        for(var j = 1; j <= cols; j++){
-            var newSalvoLocation = "#bottomGrid" + rowHeaders[i] + j;
-            if($(newSalvoLocation).hasClass("preSelected") && newSalvoLocation != "#bottomGrid" + cellId) {
-                preselectedSalvos.push(newSalvoLocation.slice(11));
-            }
-        }
-    }
-    
-    if(preselectedSalvos.length == 5) {$("#fireSalvos").prop("disabled", false);} else {$("#fireSalvos").prop("disabled", true);}
-}
-
-function deselectAll() {
-    $(".topGridCell").removeClass("preSelected");
-    $(".topGridCell").removeClass("wrongSelected");
-    $("#placeShip").prop("disabled", true);
 }
 
 function selectSubsequentVertical(cellId) {
@@ -123,7 +88,7 @@ function selectSubsequentVertical(cellId) {
 
     for( var i = row; i < row + shipLength; i++) {
         locations.push(rowHeaders[i] + col)
-        $("#topGrid" + rowHeaders[i] + col).addClass("preSelected");
+        $("#shipGrid" + rowHeaders[i] + col).addClass("preSelected");
     }
 
     validateLocations(locations);
@@ -137,10 +102,46 @@ function selectSubsequentHorizontal(cellId) {
 
     for( var i = col; i < col + shipLength; i++) {
         locations.push(row + i);
-        $("#topGrid" + row + i).addClass("preSelected");
+        $("#shipGrid" + row + i).addClass("preSelected");
     }
 
     validateLocations(locations);
+}
+
+function selectSalvoPosition() {
+    var cellId = $(this).attr('id').slice(9);
+    getPreselectedSalvoLocations(cellId);
+
+    $(this).toggleClass("preSelected");
+
+}
+
+function getPreselectedSalvoLocations(cellId) {
+    var rows = 10;
+    var cols = 10;
+    var rowHeaders = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    var preselectedSalvos = [];
+
+    if(!$("#salvoGrid" + cellId).hasClass("preSelected")) {
+        preselectedSalvos.push(cellId);
+    }
+
+    for(var i = 1; i <= rows ; i++){
+        for(var j = 1; j <= cols; j++){
+            var newSalvoLocation = "#salvoGrid" + rowHeaders[i] + j;
+            if($(newSalvoLocation).hasClass("preSelected") && newSalvoLocation != "#salvoGrid" + cellId) {
+                preselectedSalvos.push(newSalvoLocation.slice(11));
+            }
+        }
+    }
+
+    if(preselectedSalvos.length == 5) {$("#fireSalvos").prop("disabled", false);} else {$("#fireSalvos").prop("disabled", true);}
+}
+
+function deselectAll() {
+    $(".shipGridCell").removeClass("preSelected");
+    $(".shipGridCell").removeClass("wrongSelected");
+    $("#placeShip").prop("disabled", true);
 }
 
 function validateLocations(locations) {
@@ -150,8 +151,8 @@ function validateLocations(locations) {
     if (locations[locations.length-1].slice(1) > 10 || locations.indexOf("K" + locations[0].slice(1)) != -1) {
         locations.forEach(function(location) {
             $("#placeShip").prop("disabled", true);
-            $("#topGrid" + location).removeClass("preSelected");
-            $("#topGrid" + location).addClass("wrongSelected");
+            $("#shipGrid" + location).removeClass("preSelected");
+            $("#shipGrid" + location).addClass("wrongSelected");
         })
     }  
 }
@@ -192,11 +193,52 @@ function getParameterFromUrl(parameter) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+function displayGameStatus(code) {
+    switch(code) {
+        case 1:
+            statusMessage = "Place ships";
+            $("#statusImage").addClass("hidden");
+            break;
+        case 2:
+            statusMessage = "Wait for opponent to place ships.";
+            $("#statusImage").removeClass("hidden");
+            break;
+        case 3:
+            statusMessage = "Enter salvo";
+            $("#statusImage").addClass("hidden");
+            break;
+        case 4:
+            statusMessage = "Wait for opponent to enter salvos";
+            $("#statusImage").removeClass("hidden");
+            break;
+        case 5:
+            statusMessage = "Game over";
+            $("#statusImage").addClass("hidden");
+            $("#gameOver").removeClass("hidden");
+            $.post({
+                url: "api/game_view/" + partId +"/scores",
+            })
+                .done(function (response, status, jqXHR) {
+                getViewData();
+                console.log(response);
+            })
+                .fail(function (jqXHR, status, httpError) {
+                console.log("Failed: " + status + " " + httpError);
+            })
+            break;
+    }
+
+    console.log("Game Status: " + statusMessage);
+    $("#statusBoard").text(statusMessage)
+}
+
 function getViewData() {
     var id = getParameterFromUrl("part")
 
     $.get("api/game_view/" + id)
         .done(function(data) {
+
+        displayGameStatus(data.status);
 
         var ships = data.ships;
         var shipNumber = data.ships.length;
@@ -208,6 +250,7 @@ function getViewData() {
         var opponentName = "opponent";
         var opponentSalvos = [];
         var opponentHits = [];
+        turn = user.salvos.length + 1;
 
         if(shipNumber > 4) {disablePlacingShips();}
 
@@ -216,15 +259,15 @@ function getViewData() {
             opponentName = opponent.player.username;
             opponentHits = opponent.hitShips;
         }
-        
+
         printPlacedShips(opponentHits, "#shipList");
         printPlacedShips(userHits, "#opponentShipList");
 
-        printElement(ships, "top", "ship");
-        printElement(userSalvos, "bottom", "salvo");
-        printElement(opponentSalvos, "top", "hiddenSalvo");
-        printElement(opponentHits, "top", "hit");
-        printElement(userHits, "bottom", "hit");
+        printShips(ships);
+        printElement(userSalvos, "salvo", "salvo");
+        printElement(opponentSalvos, "ship", "hiddenSalvo");
+        printElement(opponentHits, "ship", "hit");
+        printElement(userHits, "salvo", "hit");
         printViewData(username, opponentName);
     })
         .fail(function( jqXHR, textStatus ) {
@@ -244,11 +287,37 @@ function printPlacedShips(ships, element) {
 }
 
 function printElement(element, grid, css) {
-    element.forEach(function(item){
+    element.forEach(function(item, i){
         var loc = item.locations;
         loc.forEach(function(location) {
             $("#" + grid + "Grid" + location).addClass(css);
-            $("#" + grid + "Grid" + location).text(item.turn);
+            $("#" + grid + "Grid" + location).text(item.turn);        
+        })
+    })
+}
+
+function printShips(ships) {
+    ships.forEach(function(ship){
+        var loc = ship.locations;
+        var orientation = "V";
+        
+        
+        if(loc[0].slice(0,1) == loc[1].slice(0,1)) { orientation = "H"}
+        
+        loc.forEach(function(location, i) {
+
+            switch(i) {
+                case 0:
+                    $("#shipGrid" + location).addClass("shipStart" + orientation);
+                    break;
+                case ship.locations.length - 1:
+                    $("#shipGrid" + location).addClass("shipEnd" + orientation);
+                    break;
+                default:
+                    $("#shipGrid" + location).addClass("shipCenter" + orientation);
+                    break;
+            }
+
         })
     })
 }
@@ -276,9 +345,9 @@ function getPreselectedLocations(grid) {
 
 function placeShip(event) {
 
-    var shipCategory = ships[$("#shipType").val()].category;
-    var locations = getPreselectedLocations("#topGrid");
     event.preventDefault();
+    var shipCategory = ships[$("#shipType").val()].category;
+    var locations = getPreselectedLocations("#shipGrid");
 
     $.post({
         url: "api/game_view/" + partId +"/ships", 
@@ -286,7 +355,7 @@ function placeShip(event) {
         contentType: "application/json"
     })
         .done(function (response, status, jqXHR) {
-        window.location.href = "/game_view.html?part=" + partId;
+        getViewData();
         console.log(response);
     })
         .fail(function (jqXHR, status, httpError) {
@@ -296,17 +365,19 @@ function placeShip(event) {
 
 function placeSalvos(event) {
 
-    var locations = getPreselectedLocations("#bottomGrid");
     event.preventDefault();
+    var locations = getPreselectedLocations("#salvoGrid");
+
+    $.get()
 
     $.post({
         url: "api/game_view/" + partId +"/salvos", 
-        data: JSON.stringify({ turn: 1, locations: locations}),
+        data: JSON.stringify({ turn: turn, locations: locations}),
         contentType: "application/json"
     })
         .done(function (response, status, jqXHR) {
-        window.location.href = "/game_view.html?part=" + partId;
-        //$("#salvoGridBtn").click();
+        getViewData();
+        $(".salvoGridCell").removeClass("preSelected");
         console.log(response);
     })
         .fail(function (jqXHR, status, httpError) {

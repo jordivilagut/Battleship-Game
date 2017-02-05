@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -147,11 +149,13 @@ public class SalvoController {
     @RequestMapping(path = "/game_view/{id}/salvos", method = RequestMethod.POST)
     public ResponseEntity<String> placeSalvo(@PathVariable("id") long id, @RequestBody Salvo salvo, Authentication auth) {
         Participation participation = participations.findOne(id);
+        Participation opponent = participation.getGame().getParticipations().stream().filter(p ->p.getId() != participation.getId()).findFirst().get();
         Player player = participation.getPlayer();
         Player user = getUser(auth);
         List<String> occupiedLocations = participation.getSalvos().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
         List<String> newLocations = salvo.getLocations().stream().collect(toList());
         List<Integer> registeredTurns = participation.getSalvos().stream().map(s -> s.getTurn()).collect(toList());
+        int opponentTurns = opponent.getSalvos().size();
         int newTurn = salvo.getTurn();
 
         if(user == null || player == null) {
@@ -166,13 +170,39 @@ public class SalvoController {
             return new ResponseEntity<>("Invalid location.", HttpStatus.FORBIDDEN);
         }
 
-        if(registeredTurns.contains(newTurn)) {
+        if(registeredTurns.contains(newTurn) || newTurn > opponentTurns + 1) {
             return new ResponseEntity<>("Invalid turn.", HttpStatus.FORBIDDEN);
+        }
+
+        if(participation.getShips().size() < 5 || opponent.getShips().size() < 5) {
+            return new ResponseEntity<>("Ships aren't placed.", HttpStatus.FORBIDDEN);
         }
 
         participation.addSalvo(salvo);
         salvos.save(salvo);
         return new ResponseEntity<>("Salvos placed successfully.", HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/game_view/{id}/scores", method = RequestMethod.POST)
+    public ResponseEntity<String> registerScore(@PathVariable("id") long id, Authentication auth) {
+        Participation participation = participations.findOne(id);
+        Participation opponent = participation.getGame().getParticipations().stream().filter(p ->p.getId() != participation.getId()).findFirst().get();
+        List<String> opponentSalvos = opponent.getSalvos().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
+        int sunkShips = participation.getShips().stream().filter(s -> getHitsNr(s, opponentSalvos) >= s.getLocations().size()).collect(toList()).size();
+        int opponentSunkShips = opponent.getShips().stream().filter(s -> getHitsNr(s, opponentSalvos) >= s.getLocations().size()).collect(toList()).size();
+        double score;
+
+        if (sunkShips < opponentSunkShips) {
+            score = 1;
+        }else if(sunkShips == opponentSunkShips) {
+            score = 0.5;
+        }else {
+            score = 0;
+        }
+
+        participation.setScore(score);
+        participations.save(participation);
+        return new ResponseEntity<>("Game Over", HttpStatus.CREATED);
     }
 
     private Map<String, Object> makeMap(String key, Object value) {
@@ -224,12 +254,61 @@ public class SalvoController {
         return dto;
     }
 
+    public int getHitsNr (Ship ship, List<String> opponentSalvos) {
+        List<String> hits = ship.getLocations().stream().collect(toList());
+        hits.retainAll(opponentSalvos);
+        return hits.size();
+    }
+
     public Map<String, Object> getViewDTO(Participation participation) {
+
+        Participation user = participation;
+        Participation opponent = participation.getGame().getParticipations().stream().filter(p ->p.getId() != participation.getId()).findFirst().get();
+        int userTurn = participation.getSalvos().size();
+        int opponentTurn = opponent.getSalvos().size();
+        List<String> opponentSalvos = opponent.getSalvos().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
+        int sunkShips = participation.getShips().stream().filter(s -> getHitsNr(s, opponentSalvos) >= s.getLocations().size()).collect(toList()).size();
+        int opponentSunkShips = opponent.getShips().stream().filter(s -> getHitsNr(s, opponentSalvos) >= s.getLocations().size()).collect(toList()).size();
+        int lastTurn = 16;
+        int shipsNr = 5;
+
+        //STATUS CODE chart
+        // 1 - Place ships.
+        // 2 - Wait for opponent to place ships.
+        // 3 - Enter salvo.
+        // 4 - Wait for opponent to enter salvos.
+        // 5 - Game over.
+
+        int statusCode;
+
+        if (userTurn > opponentTurn) {
+            statusCode = 4;
+        } else {
+            statusCode = 3;
+        }
+
+        if (sunkShips >= shipsNr || opponentSunkShips >= shipsNr) {
+            statusCode = 5;
+        }
+
+        if (userTurn == lastTurn && opponentTurn == lastTurn) {
+            statusCode = 5;
+        }
+
+        if (opponent.getShips().size() < shipsNr) {
+            statusCode = 2;
+        }
+
+        if (user.getShips().size() < shipsNr) {
+            statusCode = 1;
+        }
+
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", participation.getId());
         dto.put("created", participation.getTimeStamp());
         dto.put("players", participation.getGame().getParticipations().stream().map(p -> getParticipationDTO(p)).collect(toList()));
         dto.put("ships", participation.getShips().stream().map(ship -> getShipDTO(ship)).collect(toList()));
+        dto.put("status", statusCode);
         return dto;
     }
 

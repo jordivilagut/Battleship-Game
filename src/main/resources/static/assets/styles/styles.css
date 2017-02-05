@@ -27,7 +27,34 @@ header {
     z-index: 2;
 }
 
-.topGridCell, .bottomGridCell {
+#statusImage, #gameOver {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin: 40vh auto;
+}
+
+#gameOver {
+    font-family: Duedate;
+    color: rgb(158, 146, 129);
+    font-size: 50px;
+    background: darkred;
+    padding: 10px;
+    box-shadow: 0 0 8px 4px black;
+}
+
+#statusImage.hidden, #gameOver.hidden {
+    display: none;
+}
+
+#statusImage img{
+    background: rgba(255,255,255,0.8);
+}
+
+
+.shipGridCell, .salvoGridCell {
     background-image: url("../images/sea_map.jpg");
     background-size: cover;
 }
@@ -170,6 +197,11 @@ h2 {
     margin-right: 2px;
 }
 
+#statusBoard {
+    margin-top: 10px;
+    padding: 10px;
+}
+
 #board {
     margin: 10px;
 }
@@ -181,14 +213,14 @@ h2 {
     flex-direction: column;
 }
 
-#opponentInfo, #placedShips, #gameControls {
+#opponentInfo, #placedShips, #gameControls, #statusBoard {
     border: solid black 1px;
     border-radius: 10px;
     background: rgb(158, 146, 129);
     box-shadow: inset 0 0 10px black;
 }
 
-#opponentInfo {
+#opponentInfo, #statusBoard {
     height: 60px;
 }
 
@@ -215,7 +247,7 @@ h2 {
     font-size: 12px;
     vertical-align: middle;
     border: solid rgb(89, 58, 32) 1px;
-    padding: 10px 5px 10px 5px;
+    padding: 7px 5px 7px 5px;
     box-shadow: inset 0 0 5px black;
 }
 
@@ -277,7 +309,7 @@ h2 {
 
 /* GAME GRIDS CSS */
 
-#topGrid td, #bottomGrid td, #topGrid th, #bottomGrid th {
+#shipGrid td, #salvoGrid td, #shipGrid th, #salvoGrid th {
     border: solid black 1px;
     height: 45px;
     width: 45px;
@@ -285,7 +317,7 @@ h2 {
     box-shadow: inset 0 0 5px black;
 }
 
-#topGrid th, #bottomGrid th {
+#shipGrid th, #salvoGrid th {
     background: rgb(89, 58, 32);
     box-shadow: inset 0 0 10px black;
 }
@@ -300,6 +332,36 @@ h2 {
 
 .ship {
     background: black;
+}
+
+.shipStartV {
+    background: url("../images/ship4.jpg");
+    background-size: cover;
+}
+
+.shipEndV {
+    background: url("../images/ship6.jpg");
+    background-size: cover;
+}
+
+.shipCenterV {
+    background: url("../images/ship5.jpg");
+    background-size: cover;
+}
+
+.shipStartH {
+    background: url("../images/ship1.jpg");
+    background-size: cover;
+}
+
+.shipEndH {
+    background: url("../images/ship3.jpg");
+    background-size: cover;
+}
+
+.shipCenterH {
+    background: url("../images/ship2.jpg");
+    background-size: cover;
 }
 
 .hiddenSalvo {

@@ -15,40 +15,17 @@
             </div>
         </header>
         <div class="pipe"></div>
-
+        
+        <div id="statusImage">
+            <img src="assets/images/sandwatch.gif" alt="Waiting.">
+        </div>
+        
+        <div id="gameOver" class="hidden">
+            <p>Game Over</p>
+        </div>
 
         <div id="gameView">
-            <div class="gameSettings">
-                <div id="opponentInfo">
-                    <h2>Your Enemy:</h2>
-                    <p id="opponent">Opponent</p>
-                </div>
-                <div id="gameControls">
-                    <h2>Game Controls: </h2>
-                    <form>
-                        <select id="shipType">
-                            <option value="0">Aircraft Carrier</option>
-                            <option value="1">Battleship</option>
-                            <option value="2">Submarine</option>
-                            <option value="3">Destroyer</option>
-                            <option value="4">Patrol Boat</option>
-                        </select>
 
-                        <label id="orientation">
-                            <p><input type="radio" name="orientation" value="vertical" checked> Vertical</p>
-                            <p><input type="radio" name="orientation" value="horizontal"> Horizontal</p>
-                        </label>
-                    </form>
-                    <input type="button" class="blueBtn" id="placeShip" value="Place Ship" disabled>
-                    <input type="button" class="redBtn" id="fireSalvos" value="Fire" disabled>
-                </div>
-            </div>
-
-            <div id="board">
-                <button id="shipGridBtn" class="active">Ships</button><button id="salvoGridBtn">Salvos</button>
-                <table id="topGrid"></table>
-                <table id="bottomGrid" class="hidden"></table>
-            </div>
             <div class="gameSettings">
 
                 <div class="placedShips">
@@ -83,8 +60,44 @@
                     </table>
                 </div>
 
+            </div>
+
+            <div id="board">
+                <button id="shipGridBtn" class="active">Ships</button><button id="salvoGridBtn">Salvos</button>
+                <table id="shipGrid"></table>
+                <table id="salvoGrid" class="hidden"></table>
+            </div>
+
+            <div class="gameSettings">
+                <div id="opponentInfo">
+                    <h2>Your Enemy:</h2>
+                    <p id="opponent">Opponent</p>
+                </div>
+
+                <div id="statusBoard"></div>
+
+                <div id="gameControls">
+                    <h2>Game Controls: </h2>
+                    <form>
+                        <select id="shipType">
+                            <option value="0">Aircraft Carrier</option>
+                            <option value="1">Battleship</option>
+                            <option value="2">Submarine</option>
+                            <option value="3">Destroyer</option>
+                            <option value="4">Patrol Boat</option>
+                        </select>
+
+                        <label id="orientation">
+                            <p><input type="radio" name="orientation" value="vertical" checked> Vertical</p>
+                            <p><input type="radio" name="orientation" value="horizontal"> Horizontal</p>
+                        </label>
+                    </form>
+                    <input type="button" class="blueBtn" id="placeShip" value="Place Ship" disabled>
+                    <input type="button" class="redBtn" id="fireSalvos" value="Fire" disabled>
+                </div>
                 <button id="toGames">Back to Games</button>
             </div>
+
         </div>
 
         <div class="pipe2"></div>
