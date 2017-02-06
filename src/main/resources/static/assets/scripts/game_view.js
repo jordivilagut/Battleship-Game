@@ -279,7 +279,7 @@ function printPlacedShips(ships, element) {
     $(element).html("");
     ships.forEach(function(ship) {
         $(element).append($("<tr></tr>")
-                          .append($("<td></td>").attr("class", "shipIcon"))
+                          .append($("<td></td>").html("<img src=\"assets/images/battleship.png\">"))
                           .append($("<td></td>").text(ship.locations.length))
                           .append($("<td></td>").text(ship.left))
                           .append($("<td></td>").text(ship.sunk)));
