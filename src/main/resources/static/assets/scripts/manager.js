@@ -9,7 +9,7 @@ function logout(event) {
     var password = $("#passwordLogIn").val();
 
     $.post("/logout")
-        .done(function() {window.location.href = "/games.html"})
+        .done(function() {window.location.href = "/index.html"})
         .fail(function() {console.log("Log Out failed.")});
 }
 
