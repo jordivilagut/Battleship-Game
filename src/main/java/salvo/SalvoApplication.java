@@ -15,6 +15,10 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
+}
+
+
+	/*
 	@Bean
 	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, ParticipationRepository participationRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
 		return (args) -> {
@@ -119,6 +123,6 @@ public class SalvoApplication {
 			participation11.setScore(1);
 			participationRepository.save(participation11);
 		};
-	}
-}
+	}*/
+
 
