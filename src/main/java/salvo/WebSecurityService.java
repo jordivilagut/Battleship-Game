@@ -19,7 +19,7 @@ class WebSecurityService extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-					.antMatchers("/api/**", "/assets/**", "/games.html").permitAll()
+					.antMatchers("/api/**", "/assets/**", "/index.html").permitAll()
 					.antMatchers("/rest/**").denyAll()
 					//.antMatchers("/games.html").hasRole("GUEST")
 					.anyRequest().authenticated()
