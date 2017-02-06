@@ -3,7 +3,13 @@ package salvo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +21,18 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
+
+	@Configuration
+	public class DatabaseConfig {
+		@Bean
+		@Primary
+		@ConfigurationProperties(prefix = "spring.datasource")
+		public DataSource dataSource() {
+			return DataSourceBuilder.create().build();
+		}
+	}
 }
+
 
 
 	/*
