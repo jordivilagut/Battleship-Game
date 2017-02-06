@@ -251,6 +251,7 @@ function getViewData() {
         var opponentSalvos = [];
         var opponentHits = [];
         turn = user.salvos.length + 1;
+        var opponentTurn = opponent.salvos.length + 1;
 
         if(shipNumber > 4) {disablePlacingShips();}
 
@@ -260,15 +261,17 @@ function getViewData() {
             opponentHits = opponent.hitShips;
         }
 
-        printPlacedShips(opponentHits, "#shipList");
-        printPlacedShips(userHits, "#opponentShipList");
-
         printShips(ships);
-        printElement(userSalvos, "salvo", "salvo");
-        printElement(opponentSalvos, "ship", "hiddenSalvo");
-        printElement(opponentHits, "ship", "hit");
-        printElement(userHits, "salvo", "hit");
         printViewData(username, opponentName);
+
+        if(turn == opponentTurn) {
+            printElement(userSalvos, "salvo", "salvo");
+            printElement(opponentSalvos, "ship", "hiddenSalvo");
+            printElement(opponentHits, "ship", "hit");
+            printElement(userHits, "salvo", "hit");
+            printPlacedShips(opponentHits, "#shipList");
+            printPlacedShips(userHits, "#opponentShipList");
+        }
     })
         .fail(function( jqXHR, textStatus ) {
         console.log("Request Failed");
@@ -300,10 +303,10 @@ function printShips(ships) {
     ships.forEach(function(ship){
         var loc = ship.locations;
         var orientation = "V";
-        
-        
+
+
         if(loc[0].slice(0,1) == loc[1].slice(0,1)) { orientation = "H"}
-        
+
         loc.forEach(function(location, i) {
 
             switch(i) {
@@ -367,8 +370,6 @@ function placeSalvos(event) {
 
     event.preventDefault();
     var locations = getPreselectedLocations("#salvoGrid");
-
-    $.get()
 
     $.post({
         url: "api/game_view/" + partId +"/salvos", 
