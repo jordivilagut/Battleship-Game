@@ -278,6 +278,8 @@ public class SalvoController {
         // 3 - Enter salvo.
         // 4 - Wait for opponent to enter salvos.
         // 5 - Game over.
+        System.out.println("Sunkships: " + sunkShips);
+        System.out.println("Opponent Sunkships: " + opponentSunkShips);
 
         int statusCode;
 
@@ -302,6 +304,8 @@ public class SalvoController {
         if (user.getShips().size() < shipsNr) {
             statusCode = 1;
         }
+
+        System.out.println("Code: " + statusCode);
 
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", participation.getId());

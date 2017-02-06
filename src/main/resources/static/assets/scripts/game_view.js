@@ -238,8 +238,6 @@ function getViewData() {
     $.get("api/game_view/" + id)
         .done(function(data) {
 
-        displayGameStatus(data.status);
-
         var ships = data.ships;
         var shipNumber = data.ships.length;
         var user = data.players.filter(function(player) {return player.id == id;})[0];
@@ -271,6 +269,7 @@ function getViewData() {
             printElement(userHits, "salvo", "hit");
             printPlacedShips(opponentHits, "#shipList");
             printPlacedShips(userHits, "#opponentShipList");
+            displayGameStatus(data.status);
         }
     })
         .fail(function( jqXHR, textStatus ) {
