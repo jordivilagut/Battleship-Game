@@ -330,6 +330,11 @@ h2 {
     background: rgb(239, 119, 127);
 }
 
+.shipIcon {
+    background: url("../images/battleship.png");
+    background-size: cover;
+}
+
 .ship {
     background: black;
 }
