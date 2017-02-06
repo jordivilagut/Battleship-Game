@@ -267,8 +267,9 @@ public class SalvoController {
         int userTurn = participation.getSalvos().size();
         int opponentTurn = opponent.getSalvos().size();
         List<String> opponentSalvos = opponent.getSalvos().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
+        List<String> userSalvos = participation.getSalvos().stream().map(s -> s.getLocations()).flatMap(l -> l.stream()).collect(toList());
         int sunkShips = participation.getShips().stream().filter(s -> getHitsNr(s, opponentSalvos) >= s.getLocations().size()).collect(toList()).size();
-        int opponentSunkShips = opponent.getShips().stream().filter(s -> getHitsNr(s, opponentSalvos) >= s.getLocations().size()).collect(toList()).size();
+        int opponentSunkShips = opponent.getShips().stream().filter(s -> getHitsNr(s, userSalvos) >= s.getLocations().size()).collect(toList()).size();
         int lastTurn = 16;
         int shipsNr = 5;
 

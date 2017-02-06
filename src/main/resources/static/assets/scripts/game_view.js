@@ -262,6 +262,8 @@ function getViewData() {
         printShips(ships);
         printViewData(username, opponentName);
 
+        if(data.status != 5) {displayGameStatus(data.status);}
+
         if(turn == opponentTurn) {
             printElement(userSalvos, "salvo", "salvo");
             printElement(opponentSalvos, "ship", "hiddenSalvo");
