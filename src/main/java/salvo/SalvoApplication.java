@@ -34,7 +34,6 @@ public class SalvoApplication {
 }
 
 
-
 	/*
 	@Bean
 	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, ParticipationRepository participationRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
