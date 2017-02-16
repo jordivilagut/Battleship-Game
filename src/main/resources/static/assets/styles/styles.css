@@ -49,9 +49,6 @@ header {
     display: none;
 }
 
-#statusImage img{
-    background: rgba(255,255,255,0.8);
-}
 
 
 .shipGridCell, .salvoGridCell {
